@@ -5,6 +5,13 @@ import java.util.List;
 
 public class Heap {
 
+  /**
+   * Single heapify iteration used in cycle to create a binary heap on a List.
+   * @param arr List to be sorted
+   * @param size maximum index of binary heap
+   * @param index starting node to heapify
+   * @param <T> comparable type
+   */
   private static <T extends Comparable<T>> void heapify(List<T> arr, int size, int index) {
     int max = index;
     int left = 2 * index + 1;
@@ -21,6 +28,11 @@ public class Heap {
     }
   }
 
+  /**
+   * Sorting a List in ascending order
+   * @param arr to be sorted
+   * @param <T> comparable type
+   */
   public static <T extends Comparable<T>> void heapsort(List<T> arr) {
     for (int i = arr.size() / 2 - 1; i >= 0; i--) {
       heapify(arr, arr.size(), i);
