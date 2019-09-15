@@ -23,9 +23,9 @@ public class DistanceTest {
     assertEquals(0, dmin.compareTo(d1));
 
     Distance d0 = new Distance(0);
-    dmin = Distance.min(dinf,d0.add(dinf));
-    assertEquals(dinf,dmin);
-    dmin = Distance.min(dinf,dinf.add(d0));
-    assertEquals(dinf,dmin);
+    dmin = Distance.min(dinf, d0.add(dinf));
+    assertEquals(dinf, dmin);
+    dmin = Distance.min(dinf, dinf.add(d0));
+    assertEquals(dinf, dmin);
   }
 }

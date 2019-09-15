@@ -50,6 +50,7 @@ public class SquareMatrix {
 
   /**
    * Set [i][j] distance to finite value.
+   *
    * @param i "from" index
    * @param j "to" index
    * @param value length of Edge
@@ -60,6 +61,7 @@ public class SquareMatrix {
 
   /**
    * set [i][j] distance to custom value.
+   *
    * @param i "from" index
    * @param j "to" index
    * @param d distance to set
@@ -70,6 +72,7 @@ public class SquareMatrix {
 
   /**
    * Get [i][j] distance
+   *
    * @param i "from" index
    * @param j "to" index
    * @return distance from i to j
