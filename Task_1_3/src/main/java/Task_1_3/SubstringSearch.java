@@ -29,7 +29,7 @@ public class SubstringSearch {
   }
 
   /**
-   * Reads whole file as a String.
+   * Reads whole file as a String. Warning: String length is int (4 bytes), File length is long (8 bytes).
    *
    * @param fileName path to file
    * @return file content
