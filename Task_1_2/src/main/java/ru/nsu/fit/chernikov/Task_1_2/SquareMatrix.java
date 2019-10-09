@@ -1,4 +1,4 @@
-package Task_1_2;
+package ru.nsu.fit.chernikov.Task_1_2;
 
 import java.util.Arrays;
 

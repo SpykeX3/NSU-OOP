@@ -1,4 +1,6 @@
-package Task_1_2;
+package ru.nsu.fit.chernikov.Task_1_2;
+
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 public class Distance implements Comparable<Distance> {
   private boolean inf;
@@ -80,7 +82,8 @@ public class Distance implements Comparable<Distance> {
    * @param otherDist comparison argument
    * @return positive if this is more, zero if equal and negative if less
    */
-  public int compareTo(Distance otherDist) {
+  @Override
+  public int compareTo(@NonNull Distance otherDist) {
     if (inf && otherDist.inf) return 0;
     if (inf) return 1;
     if (otherDist.inf) return (-1);
