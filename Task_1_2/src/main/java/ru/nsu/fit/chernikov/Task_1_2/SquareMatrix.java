@@ -2,6 +2,11 @@ package ru.nsu.fit.chernikov.Task_1_2;
 
 import java.util.Arrays;
 
+/**
+ * Represents a square matrix of distances.
+ * Provides storage and interface for accessing contained distances.
+ * Diagonal distances equal zero by defauld.
+ */
 public class SquareMatrix {
   private int size;
   private Distance[][] matrix;

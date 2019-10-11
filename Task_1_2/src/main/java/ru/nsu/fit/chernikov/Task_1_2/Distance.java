@@ -2,6 +2,10 @@ package ru.nsu.fit.chernikov.Task_1_2;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 
+/**
+ * Distance represents an integer number that cam be infinite.
+ * First isInf should be checked, then getWeight.
+ */
 public class Distance implements Comparable<Distance> {
   private boolean inf;
   private int weight;
