@@ -77,7 +77,7 @@ public class Stack<T> implements Iterable<T> {
   /**
    * Get number of elements in stack.
    *
-   * @return size os stack
+   * @return size of stack
    */
   public int count() {
     return size;
