@@ -18,18 +18,21 @@ public class SubstringSearchTest {
     return new String(Files.readAllBytes(Paths.get(fileName)));
   }
 
-  private void check(String str, String substr, ArrayList<Integer> positions) {
+  private void check(String str, String substr, ArrayList<Long> positions) {
     int sslen = substr.length();
-    for (int pos : positions) {
-      assertEquals("failed finding '" + substr + "'", substr, str.substring(pos, pos + sslen));
+    for (long pos : positions) {
+      assertEquals(
+          "failed finding '" + substr + "'", substr, str.substring((int) pos, (int) pos + sslen));
     }
   }
 
   @Test
   public void testOnFile() {
     String data = null;
-    String[] checkList = {"1", "123", "假借字", " ", "\n", "абра", "aaa", "qwerty", "333"};
-    int[] expectedCount = {2, 1, 4, 5, 6, 8, 18, 1, 0};
+    String[] checkList = {
+      "1", "123", "假借字", " ", "абра", "aaa", "qwerty", "333", "I am a long test!"
+    };
+    int[] expectedCount = {2, 1, 4, 9, 8, 18, 1, 0, 1};
 
     try {
       data = readFileAsString("src/test/resources/input.txt");
@@ -39,16 +42,15 @@ public class SubstringSearchTest {
     }
     for (int i = 0; i < checkList.length; i++) {
       try {
-        ArrayList<Integer> res =
-            SubstringSearch.search("src/test/resources/input.txt", checkList[i]);
+        ArrayList<Long> res = SubstringSearch.search("src/test/resources/input.txt", checkList[i]);
         assertEquals(
             "wrong substring count for '" + checkList[i] + "': " + i, expectedCount[i], res.size());
         check(
             data,
             checkList[i],
             SubstringSearch.search("src/test/resources/input.txt", checkList[i]));
-      } catch (FileNotFoundException e) {
-        System.err.println(e);
+      } catch (IOException e) {
+        System.err.println(e+"\nException while checking '"+checkList[i]+"'");
         fail();
       }
     }
