@@ -75,6 +75,15 @@ public class Stack<T> implements Iterable<T> {
   }
 
   /**
+   * Get number of elements in stack.
+   *
+   * @return size os stack
+   */
+  public int count() {
+    return size;
+  }
+
+  /**
    * Put element on top of existing elements in stack.
    *
    * @param value
