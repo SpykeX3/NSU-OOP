@@ -50,7 +50,7 @@ public class SubstringSearchTest {
             checkList[i],
             SubstringSearch.search("src/test/resources/input.txt", checkList[i]));
       } catch (IOException e) {
-        System.err.println(e+"\nException while checking '"+checkList[i]+"'");
+        System.err.println(e + "\nException while checking '" + checkList[i] + "'");
         fail();
       }
     }
