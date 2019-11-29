@@ -14,15 +14,15 @@ public class PQueueTest {
     PQueue<Integer, String> pq = new PQueue<>();
     pq.insert(200, "собака");
     pq.insert(10, "человек");
-    String extracted = pq.extrack_minimum();
+    String extracted = pq.extract_minimum();
     assertEquals("собака", extracted);
     pq.insert(5, "пингвин");
     pq.insert(500, "попугай");
-    extracted = pq.extrack_minimum();
+    extracted = pq.extract_minimum();
     assertEquals("попугай", extracted);
-    extracted = pq.extrack_minimum();
+    extracted = pq.extract_minimum();
     assertEquals("человек", extracted);
-    extracted = pq.extrack_minimum();
+    extracted = pq.extract_minimum();
     assertEquals("пингвин", extracted);
   }
 
@@ -36,7 +36,7 @@ public class PQueueTest {
       pq.insert(i, i + 100);
     }
     for (int i = 14; i >= 0; i--) {
-      assertEquals(i + 100, (long) pq.extrack_minimum());
+      assertEquals(i + 100, (long) pq.extract_minimum());
     }
   }
 
@@ -47,7 +47,7 @@ public class PQueueTest {
       pq.insert(-i, i + 100);
     }
     for (int i = 0; i < 15; i++) {
-      assertEquals(i + 100, (long) pq.extrack_minimum());
+      assertEquals(i + 100, (long) pq.extract_minimum());
     }
   }
 
@@ -61,7 +61,7 @@ public class PQueueTest {
     }
     long insertedTime = System.nanoTime();
     for (int i = 14999; i >= 0; i--) {
-      assertEquals(i + 100, (long) pq.extrack_minimum());
+      assertEquals(i + 100, (long) pq.extract_minimum());
     }
     long endTime = System.nanoTime();
     System.out.println("15k queue worst case: "); // Tested to be 673-3704ms
@@ -83,7 +83,7 @@ public class PQueueTest {
     }
     long insertedTime = System.nanoTime();
     for (int i = 0; i < 15000; i++) {
-      assertEquals(i + 100, (long) pq.extrack_minimum());
+      assertEquals(i + 100, (long) pq.extract_minimum());
     }
     long endTime = System.nanoTime();
     System.out.println("15k queue best case: ");
@@ -103,19 +103,19 @@ public class PQueueTest {
       pq.insert(0, 0);
       pq.insert(0, 1);
       pq.insert(0, 2);
-      pq.extrack_minimum();
-      pq.extrack_minimum();
-      pq.extrack_minimum();
+      pq.extract_minimum();
+      pq.extract_minimum();
+      pq.extract_minimum();
     } catch (EmptyStackException e) {
       fail();
     }
-    pq.extrack_minimum();
+    pq.extract_minimum();
   }
 
   @Test(expected = EmptyStackException.class)
   public void testEmptyExceptionUnused() {
     PQueue<Integer, Integer> pq = new PQueue<>();
-    pq.extrack_minimum();
+    pq.extract_minimum();
   }
 
   @Test
@@ -134,13 +134,17 @@ public class PQueueTest {
   @Test
   public void testCount() {
     PQueue<Integer, Integer> pq = new PQueue<>();
+    int expected = 0;
+    assertEquals(expected, pq.getCount());
     for (int i = 0; i < 15; i++) {
       pq.insert(i, i + 100);
+      expected++;
+      assertEquals(expected, pq.getCount());
     }
-    int expected = 15;
+    expected = 15;
     assertEquals(expected, pq.getCount());
     for (int i = 15; i > 0; i--) {
-      pq.extrack_minimum();
+      pq.extract_minimum();
       expected--;
       assertEquals(expected, pq.getCount());
     }

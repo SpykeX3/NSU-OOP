@@ -6,29 +6,35 @@ package ru.nsu.fit.chernikov.Task_2_2;
 import java.util.EmptyStackException;
 import java.util.Iterator;
 
+/**
+ * Priority queue, extracts elements with maximal key.
+ *
+ * @param <K> type of key
+ * @param <T> type of stored elements
+ */
 public class PQueue<K extends Comparable<K>, T> implements Iterable<T> {
   private class PList {
     private K priority;
     private T value;
     private PList next, prev;
 
-    public PList() {
+    PList() {
       next = this;
       prev = this;
     }
 
-    public PList(K pr, T val) {
+    PList(K pr, T val) {
       priority = pr;
       value = val;
       next = this;
       prev = this;
     }
 
-    public T getValue() {
+    T getValue() {
       return value;
     }
 
-    public PList insert(K pr, T val) {
+    PList insert(K pr, T val) {
       PList seeker = this.next;
       PList node = new PList(pr, val);
       while (seeker != this && seeker.priority.compareTo(node.priority) < 0) {
@@ -44,7 +50,7 @@ public class PQueue<K extends Comparable<K>, T> implements Iterable<T> {
       return node;
     }
 
-    public T pop() {
+    T pop() {
       if (prev == this) {
         throw new EmptyStackException();
       }
@@ -55,10 +61,11 @@ public class PQueue<K extends Comparable<K>, T> implements Iterable<T> {
     }
   }
 
+  /** Iterator with standard order. */
   private class PQIterator implements Iterator<T> {
     PList current;
 
-    public PQIterator() {
+    PQIterator() {
       current = head.prev;
     }
 
@@ -78,17 +85,29 @@ public class PQueue<K extends Comparable<K>, T> implements Iterable<T> {
   private PList head;
   private int count;
 
+  /** PQueue constructor. */
   public PQueue() {
     head = new PList();
     count = 0;
   }
 
+  /**
+   * Insert an element in queue with priority.
+   *
+   * @param key priority of inserted element.
+   * @param value to be stored.
+   */
   public void insert(K key, T value) {
     head.insert(key, value);
     count++;
   }
 
-  public T extrack_minimum() {
+  /**
+   * Extracts element with highest priority.
+   *
+   * @return value with highest priority.
+   */
+  public T extract_minimum() {
     if (count == 0) {
       throw new EmptyStackException();
     }
@@ -97,10 +116,20 @@ public class PQueue<K extends Comparable<K>, T> implements Iterable<T> {
     return val;
   }
 
+  /**
+   * Get count of stored elements.
+   *
+   * @return count.
+   */
   public int getCount() {
     return count;
   }
 
+  /**
+   * Get iterator. Will iterate with standard order without removing elements.
+   *
+   * @return iterator.
+   */
   @Override
   public Iterator<T> iterator() {
     return new PQIterator();
