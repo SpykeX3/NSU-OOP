@@ -3,15 +3,14 @@
  */
 package ru.nsu.fit.chernikov.Task_3_2;
 
-import javafx.util.Pair;
 import java.util.ArrayList;
-
+import java.util.AbstractMap;
 /**
  * Record of all student's credits. Can store credits and marks that can be final or intermediate.
  */
 public class CredsRecord {
   private Credit finalProject;
-  private ArrayList<ArrayList<Pair<String, Credit>>> records;
+  private ArrayList<ArrayList<AbstractMap.SimpleEntry<String, Credit>>> records;
   private int marksInDiploma;
   private int currentFinalMarks;
 
@@ -53,7 +52,7 @@ public class CredsRecord {
       }
       currentFinalMarks++;
     }
-    records.get(semester - 1).add(new Pair<>(title, new Credit(mark, isFinal)));
+    records.get(semester - 1).add(new AbstractMap.SimpleEntry<>(title, new Credit(mark, isFinal)));
   }
 
   /**
@@ -65,7 +64,9 @@ public class CredsRecord {
    * @param semester number of semester of this mark, counting from 1.
    */
   public void addCredit(String title, boolean passed, boolean isFinal, int semester) {
-    records.get(semester - 1).add(new Pair<>(title, new Credit(passed, isFinal)));
+    records
+        .get(semester - 1)
+        .add(new AbstractMap.SimpleEntry<>(title, new Credit(passed, isFinal)));
   }
 
   /**
