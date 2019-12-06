@@ -9,10 +9,13 @@
 plugins {
     // Apply the java plugin to add support for Java
     id 'java'
-
-    // Apply the application plugin to add support for building a CLI application
-    id 'application'
+    id 'org.openjfx.javafxplugin' version '0.0.8'
 }
+javafx {
+    version = '11'
+    modules = ['javafx.base']
+}
+
 
 repositories {
     // Use jcenter for resolving dependencies.
@@ -28,7 +31,4 @@ dependencies {
     testImplementation 'junit:junit:4.12'
 }
 
-application {
-    // Define the main class for the application
-    mainClassName = 'ru.nsu.fit.chernikov.Task_3_2.App'
-}
+
