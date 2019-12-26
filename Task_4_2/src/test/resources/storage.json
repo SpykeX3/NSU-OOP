@@ -1,0 +1,27 @@
+[
+  {
+    "creationTime": "Dec 26, 2019, 11:53:37 PM",
+    "title": "hello",
+    "body": "world"
+  },
+  {
+    "creationTime": "Dec 26, 2019, 11:53:43 PM",
+    "title": "hello!",
+    "body": "world"
+  },
+  {
+    "creationTime": "Dec 27, 2019, 12:34:39 AM",
+    "title": "Wow that title is great",
+    "body": "But text is boring..."
+  },
+  {
+    "creationTime": "Dec 27, 2019, 12:35:01 AM",
+    "title": "Here we are",
+    "body": "Born to be kings"
+  },
+  {
+    "creationTime": "Dec 27, 2011, 12:35:39 AM",
+    "title": "Back to the future",
+    "body": "Forward to the past"
+  }
+]
