@@ -3,17 +3,12 @@
  */
 package ru.nsu.fit.chernikov;
 
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static org.junit.Assert.*;
 
 public class PrimeTaskTest {
   private static final Logger LOGGER = Logger.getLogger(PrimeTaskTest.class.getName());
@@ -47,10 +42,10 @@ public class PrimeTaskTest {
     } catch (IOException e) {
       System.err.println(e);
       System.err.println("Couldn't write string: " + str);
+      System.err.flush();
     }
   }
 
-  @BeforeClass
   public static void init() {
     // 1000000007
     try {
@@ -75,7 +70,7 @@ public class PrimeTaskTest {
       compInMid.add(examplePrime);
     }
     compInEnd.add(exampleComp);
-    writeLog("" + primes.size() + " primes in list", true);
+    System.out.println("" + primes.size() + " primes in list");
   }
 
   public static void setLog(String path) {
@@ -86,28 +81,7 @@ public class PrimeTaskTest {
     }
   }
 
-  @Test
-  public void testComposite() {
-    for (int i = 1000; i < 1050; i++) {
-      for (int j = 2000; j < 2050; j++) {
-        PrimeTask task = new PrimeTask(i * j);
-        assertFalse(task.call());
-      }
-    }
-  }
 
-  @Test
-  public void testPrime() {
-    long start = System.currentTimeMillis();
-    for (int prime : primes) {
-      PrimeTask task = new PrimeTask(prime);
-      assertTrue(task.call());
-    }
-    long end = System.currentTimeMillis();
-    writeLog("One by one time:\t" + ((double) end - start) / 1000, true);
-  }
-
-  @Test
   public void testMultipleThreads() {
     int cores = Runtime.getRuntime().availableProcessors();
     for (int j = 1; j <= cores + 2; j++) {
@@ -116,13 +90,13 @@ public class PrimeTaskTest {
       long total = 0;
       try {
         start = System.currentTimeMillis();
-        assertFalse(CompositeFinder.hasComposite(primes, j));
+        CompositeFinder.hasComposite(primes, j);
         end = System.currentTimeMillis();
         writeLog("" + j + " threads time for 'primes':\t" + ((double) end - start) / 1000, true);
         total += end - start;
 
         start = System.currentTimeMillis();
-        assertTrue(CompositeFinder.hasComposite(compInEnd, j));
+        CompositeFinder.hasComposite(compInEnd, j);
         end = System.currentTimeMillis();
         writeLog(
             "" + j + " threads time for 'composite in the end':\t" + ((double) end - start) / 1000,
@@ -130,7 +104,7 @@ public class PrimeTaskTest {
         total += end - start;
 
         start = System.currentTimeMillis();
-        assertTrue(CompositeFinder.hasComposite(compInMid, j));
+        CompositeFinder.hasComposite(compInMid, j);
         end = System.currentTimeMillis();
         writeLog(
             ""
@@ -142,12 +116,13 @@ public class PrimeTaskTest {
 
         writeLog("" + j + " threads total time':\t" + ((double) total) / 1000, true);
       } catch (Exception e) {
-        fail(e.toString());
+        System.err.println(e.toString());
       }
     }
   }
 
-  static void main() {
+  public static void main(String[] args) {
+    init();
     setLog("log.txt");
     PrimeTaskTest tst = new PrimeTaskTest();
     tst.testMultipleThreads();

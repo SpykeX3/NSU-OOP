@@ -1,42 +1,42 @@
 8000 primes in list
-One by one time:	2.311
-1 threads time for 'primes':	2.338
-1 threads time for 'composite in the end':	2.324
-1 threads time for 'composite in the middle':	1.173
-1 threads total time':	5.835
-2 threads time for 'primes':	1.166
-2 threads time for 'composite in the end':	1.166
-2 threads time for 'composite in the middle':	0.596
-2 threads total time':	2.928
-3 threads time for 'primes':	0.985
-3 threads time for 'composite in the end':	0.781
-3 threads time for 'composite in the middle':	0.42
-3 threads total time':	2.186
-4 threads time for 'primes':	0.887
-4 threads time for 'composite in the end':	0.581
-4 threads time for 'composite in the middle':	0.292
-4 threads total time':	1.76
-5 threads time for 'primes':	0.913
-5 threads time for 'composite in the end':	0.59
-5 threads time for 'composite in the middle':	0.29
-5 threads total time':	1.793
-6 threads time for 'primes':	0.873
-6 threads time for 'composite in the end':	0.577
-6 threads time for 'composite in the middle':	0.291
-6 threads total time':	1.741
-7 threads time for 'primes':	0.86
-7 threads time for 'composite in the end':	0.609
-7 threads time for 'composite in the middle':	0.295
-7 threads total time':	1.764
-8 threads time for 'primes':	0.835
-8 threads time for 'composite in the end':	0.587
-8 threads time for 'composite in the middle':	0.295
-8 threads total time':	1.717
-9 threads time for 'primes':	0.794
-9 threads time for 'composite in the end':	0.489
-9 threads time for 'composite in the middle':	0.245
-9 threads total time':	1.528
-10 threads time for 'primes':	0.648
-10 threads time for 'composite in the end':	0.444
-10 threads time for 'composite in the middle':	0.23
-10 threads total time':	1.322
+One by one time:	3.905
+1 threads time for 'primes':	4.037
+1 threads time for 'composite in the end':	3.983
+1 threads time for 'composite in the middle':	1.974
+1 threads total time':	9.994
+2 threads time for 'primes':	1.998
+2 threads time for 'composite in the end':	1.987
+2 threads time for 'composite in the middle':	0.998
+2 threads total time':	4.983
+3 threads time for 'primes':	1.519
+3 threads time for 'composite in the end':	1.196
+3 threads time for 'composite in the middle':	0.668
+3 threads total time':	3.383
+4 threads time for 'primes':	1.373
+4 threads time for 'composite in the end':	0.997
+4 threads time for 'composite in the middle':	0.498
+4 threads total time':	2.868
+5 threads time for 'primes':	1.302
+5 threads time for 'composite in the end':	1.006
+5 threads time for 'composite in the middle':	0.526
+5 threads total time':	2.834
+6 threads time for 'primes':	1.312
+6 threads time for 'composite in the end':	0.742
+6 threads time for 'composite in the middle':	0.364
+6 threads total time':	2.418
+7 threads time for 'primes':	1.095
+7 threads time for 'composite in the end':	0.763
+7 threads time for 'composite in the middle':	0.369
+7 threads total time':	2.227
+8 threads time for 'primes':	1.044
+8 threads time for 'composite in the end':	0.708
+8 threads time for 'composite in the middle':	0.403
+8 threads total time':	2.155
+9 threads time for 'primes':	1.262
+9 threads time for 'composite in the end':	0.859
+9 threads time for 'composite in the middle':	0.408
+9 threads total time':	2.529
+10 threads time for 'primes':	1.095
+10 threads time for 'composite in the end':	0.752
+10 threads time for 'composite in the middle':	0.398
+10 threads total time':	2.245
