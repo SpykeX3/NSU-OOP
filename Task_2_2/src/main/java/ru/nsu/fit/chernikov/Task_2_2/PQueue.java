@@ -3,8 +3,11 @@
  */
 package ru.nsu.fit.chernikov.Task_2_2;
 
+import java.util.AbstractMap;
+import java.util.ArrayList;
 import java.util.EmptyStackException;
 import java.util.Iterator;
+import java.util.stream.Stream;
 
 /**
  * Priority queue, extracts elements with maximal key.
@@ -71,12 +74,33 @@ public class PQueue<K extends Comparable<K>, T> implements Iterable<T> {
 
     @Override
     public boolean hasNext() {
-      return current == head;
+      return current != head;
     }
 
     @Override
     public T next() {
       T res = current.value;
+      current = current.prev;
+      return res;
+    }
+  }
+
+  private class PQEIterator implements Iterator<AbstractMap.SimpleEntry<K, T>> {
+    PList current;
+
+    PQEIterator() {
+      current = head.prev;
+    }
+
+    @Override
+    public boolean hasNext() {
+      return current != head;
+    }
+
+    @Override
+    public AbstractMap.SimpleEntry<K, T> next() {
+      AbstractMap.SimpleEntry<K, T> res =
+          new AbstractMap.SimpleEntry<>(current.priority, current.value);
       current = current.prev;
       return res;
     }
@@ -133,5 +157,14 @@ public class PQueue<K extends Comparable<K>, T> implements Iterable<T> {
   @Override
   public Iterator<T> iterator() {
     return new PQIterator();
+  }
+
+  public Stream<AbstractMap.SimpleEntry<K, T>> stream() {
+    ArrayList<AbstractMap.SimpleEntry<K, T>> list = new ArrayList<>();
+    PQEIterator iter = new PQEIterator();
+    while (iter.hasNext()) {
+      list.add(iter.next());
+    }
+    return list.stream();
   }
 }

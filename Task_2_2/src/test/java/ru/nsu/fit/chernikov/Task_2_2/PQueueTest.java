@@ -4,6 +4,8 @@
 package ru.nsu.fit.chernikov.Task_2_2;
 
 import org.junit.Test;
+
+import java.util.AbstractMap;
 import java.util.EmptyStackException;
 
 import static org.junit.Assert.*;
@@ -149,5 +151,31 @@ public class PQueueTest {
       assertEquals(expected, pq.getCount());
     }
     assertEquals(0, pq.getCount());
+  }
+
+  private void assertEntry(AbstractMap.SimpleEntry<Integer,Integer> entry, int key){
+    assertEquals(key,(long)entry.getKey());
+    assertEquals(key+100,(long)entry.getValue());
+  }
+
+  @Test
+  public void testStream(){
+    PQueue<Integer, Integer> pq = new PQueue<>();
+    int expected = 0;
+    assertEquals(expected, pq.getCount());
+    for (int i = 0; i < 15; i++) {
+      pq.insert(i, i + 100);
+      expected++;
+      assertEquals(expected, pq.getCount());
+    }
+    expected = 15;
+    int expElement = 14;
+    assertEquals(expected, pq.getCount());
+    pq.stream().reduce((last, curr) -> {
+      if (curr.getKey().compareTo(last.getKey()) > 0) {
+        fail();
+      }
+      return curr;
+    });
   }
 }
