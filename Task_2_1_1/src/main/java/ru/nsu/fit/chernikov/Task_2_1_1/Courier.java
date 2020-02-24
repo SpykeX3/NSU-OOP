@@ -12,7 +12,7 @@ public class Courier extends Thread {
   private String name;
   private ArrayList<Order> trunk;
 
-  public Courier(String _name, @NonNull Pizzeria _workplace, double _speed, int cap) {
+  public Courier(String _name, double _speed, int cap) {
     if (speed < 0) {
       throw new IllegalArgumentException("speed must be positive");
     }
@@ -20,9 +20,12 @@ public class Courier extends Thread {
       throw new IllegalArgumentException("capacity must be positive");
     }
     speed = _speed;
-    workplace = _workplace;
     name = _name;
     capacity = cap;
+  }
+
+  public void setWorkplace(Pizzeria workplace) {
+    this.workplace = workplace;
   }
 
   private int getDistance(Order order) {
@@ -61,7 +64,7 @@ public class Courier extends Thread {
         for (Order order : trunk) {
           int curDist = getDistance(order);
           if (curDist < dist) {
-            curDist = dist;
+            dist = curDist;
             closest = order;
           }
         }

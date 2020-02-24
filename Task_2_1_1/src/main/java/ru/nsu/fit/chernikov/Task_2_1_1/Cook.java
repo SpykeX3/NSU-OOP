@@ -1,18 +1,20 @@
 package ru.nsu.fit.chernikov.Task_2_1_1;
 
+import com.google.gson.annotations.Expose;
 import java.util.Date;
 
 public class Cook extends Thread {
-
   private String name;
   private double timePerUnit;
-  private Date shiftEnd;
   private Pizzeria workplace;
 
-  public Cook(String _name, Pizzeria _workplace, double _timePerUnit) {
+  public Cook(String _name, double _timePerUnit) {
     timePerUnit = _timePerUnit;
-    workplace = _workplace;
     name = _name;
+  }
+
+  public void setWorkplace(Pizzeria workplace) {
+    this.workplace = workplace;
   }
 
   @Override

@@ -3,9 +3,11 @@
  */
 package ru.nsu.fit.chernikov.Task_2_1_1;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Random;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -16,12 +18,16 @@ public class Pizzeria {
   private BlockingQueue<Order> warehouse;
 
   private ArrayList<Cook> cooks;
+
   private ArrayList<Courier> couriers;
 
   public Log log;
 
   private Date shiftEnd;
+
   private long delayLimit; // Milliseconds
+
+  private long shiftLength; // Milliseconds
 
   private double income;
 
@@ -90,35 +96,46 @@ public class Pizzeria {
     shiftEnd = new Date(end);
   }
 
-  public Pizzeria() {
-    log = new Log();
-    setShiftEnd(6);
-    cooks = new ArrayList<>();
-    couriers = new ArrayList<>();
+  public Pizzeria(
+      ArrayList<Cook> _cooks,
+      ArrayList<Courier> _couriers,
+      int whLimit,
+      long delayLim,
+      long shiftLen) {
+    cooks = _cooks;
+    couriers = _couriers;
+    warehouse = new ArrayBlockingQueue<>(whLimit, true);
     pendingOrders = new LinkedBlockingQueue<>();
-    warehouse = new ArrayBlockingQueue<>(10);
-    delayLimit = 5500;
-  }
-
-  public Pizzeria(int whLimit, long timeLimit) {
+    delayLimit = delayLim;
+    shiftLength = shiftLen;
     log = new Log();
-    setShiftEnd(timeLimit);
-    cooks = new ArrayList<>();
-    couriers = new ArrayList<>();
-    pendingOrders = new LinkedBlockingQueue<>();
-    warehouse = new ArrayBlockingQueue<>(whLimit);
   }
 
-  public void addCook(String name, double tpu) {
-    Cook newCook = new Cook(name, this, tpu);
-    newCook.start();
-    cooks.add(newCook);
-  }
-
-  public void addCourier(String name, double speed, int capacity) {
-    Courier courier = new Courier(name, this, speed, capacity);
-    courier.start();
-    couriers.add(courier);
+  public void run() {
+    setShiftEnd(shiftLength);
+    for (Cook c : cooks) {
+      c.setWorkplace(this);
+      c.start();
+    }
+    for (Courier cr : couriers) {
+      cr.setWorkplace(this);
+      cr.start();
+    }
+    for (Cook ck : cooks) {
+      try {
+        ck.join();
+      } catch (InterruptedException e) {
+        log.logException(e);
+      }
+    }
+    for (Courier ck : couriers) {
+      try {
+        ck.join();
+      } catch (InterruptedException e) {
+        log.logException(e);
+      }
+    }
+    log.logStatistics();
   }
 
   public void addOrder(Order order) {
@@ -130,8 +147,8 @@ public class Pizzeria {
   }
 
   public long getDateDiff(Date date1, Date date2, TimeUnit timeUnit) {
-    long diffInMillies = date2.getTime() - date1.getTime();
-    return timeUnit.convert(diffInMillies, TimeUnit.MILLISECONDS);
+    long diffInMillis = date2.getTime() - date1.getTime();
+    return timeUnit.convert(diffInMillis, TimeUnit.MILLISECONDS);
   }
 
   public long timeUntilShiftEnd() {
@@ -148,40 +165,15 @@ public class Pizzeria {
   }
 
   public static void main(String[] args) {
-    Pizzeria PpJhns = new Pizzeria();
-    PpJhns.addCook("Vova", 1);
-    PpJhns.addCook("Kolya", 1);
-    PpJhns.addCook("Mr. Dimples", 0.3);
-    PpJhns.addCook("Papa", 0.2);
-    PpJhns.addCourier("Sonic", 80, 3);
-    PpJhns.addCourier("Tails", 45, 5);
-    PpJhns.addCourier("Knuckles", 35, 6);
-    for (int i = 0; i < 35; i++) {
-      Random rnd = new Random();
-      int x = rnd.nextInt(41) - 20;
-      int y = rnd.nextInt(41) - 20;
-      Order newOrd = new Order(1.0 + Math.sqrt(i), 100, i, new Date(), x, y);
-      PpJhns.addOrder(newOrd);
-      try{
-      Thread.sleep(100);
-      } catch (InterruptedException e){
-        PpJhns.log.logException(e);
-      }
-    }
+    File flPizza = new File("src/main/resources/configPizzeria.json");
+    File flClients = new File("src/main/resources/configClients.json");
     try {
-      for (Cook cook : PpJhns.cooks) {
-        System.out.println("Waiting for "+cook.getCName());
-        System.out.flush();
-        cook.join();
-      }
-      for (Courier courier : PpJhns.couriers) {
-        System.out.println("Waiting for "+courier.getCName());
-        System.out.flush();
-        courier.join();
-      }
-    } catch (Exception e) {
+      Pizzeria pz = Config.parse(new FileReader(flPizza));
+      Clients cl = new Clients(pz, new FileReader(flClients));
+      cl.start();
+      pz.run();
+    } catch (IOException e) {
       System.err.println(e.toString());
     }
-    PpJhns.log.logStatistics();
   }
 }

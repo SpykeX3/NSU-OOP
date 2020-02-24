@@ -5,7 +5,7 @@ import java.util.Date;
 public class Order {
 
   private double complexity;
-  private double cost;
+  private long cost;
   private long orderId;
   private Date orderDate;
   private int x, y;
@@ -13,7 +13,7 @@ public class Order {
   private Courier courier;
 
   public Order(
-      double _complexity, double _cost, long _orderId, Date _orderDate, int xCoord, int yCoord) {
+      double _complexity, long _cost, long _orderId, Date _orderDate, int xCoord, int yCoord) {
     complexity = _complexity;
     cost = _cost;
     orderDate = _orderDate;
@@ -26,7 +26,7 @@ public class Order {
     return complexity;
   }
 
-  public double getCost() {
+  public long getCost() {
     return cost;
   }
 

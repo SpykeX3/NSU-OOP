@@ -1,0 +1,36 @@
+{
+  "shiftLenS": 20,
+  "delayMS": 6000,
+  "warehouseCap": 10,
+  "cookConfigs": [
+    {
+      "name": "A",
+      "tpu": 0.3
+    },
+    {
+      "name": "B",
+      "tpu": 1.0
+    },
+    {
+      "name": "C",
+      "tpu": 2.0
+    }
+  ],
+  "courierConfigs": [
+    {
+      "name": "X",
+      "speed": 25.0,
+      "cap": 3
+    },
+    {
+      "name": "Y",
+      "speed": 40.0,
+      "cap": 2
+    },
+    {
+      "name": "Z",
+      "speed": 60.0,
+      "cap": 1
+    }
+  ]
+}

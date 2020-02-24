@@ -1,0 +1,457 @@
+[
+  {
+    "complexity": 4.294885437869261,
+    "cost": 159,
+    "x": -7,
+    "y": 15,
+    "timeOfOrder": 175
+  },
+  {
+    "complexity": 2.446254803596046,
+    "cost": 304,
+    "x": 0,
+    "y": -15,
+    "timeOfOrder": 869
+  },
+  {
+    "complexity": 0.5481388431804446,
+    "cost": 114,
+    "x": -7,
+    "y": -2,
+    "timeOfOrder": 1665
+  },
+  {
+    "complexity": 0.8799840117660895,
+    "cost": 184,
+    "x": 11,
+    "y": 4,
+    "timeOfOrder": 1837
+  },
+  {
+    "complexity": 4.646785529892034,
+    "cost": 356,
+    "x": -8,
+    "y": 2,
+    "timeOfOrder": 2361
+  },
+  {
+    "complexity": 4.604572768750334,
+    "cost": 345,
+    "x": 12,
+    "y": -2,
+    "timeOfOrder": 2698
+  },
+  {
+    "complexity": 1.7837079297808256,
+    "cost": 176,
+    "x": -12,
+    "y": -19,
+    "timeOfOrder": 3347
+  },
+  {
+    "complexity": 0.6652192577685562,
+    "cost": 142,
+    "x": -20,
+    "y": 3,
+    "timeOfOrder": 3667
+  },
+  {
+    "complexity": 4.516189239827605,
+    "cost": 399,
+    "x": 7,
+    "y": 3,
+    "timeOfOrder": 3773
+  },
+  {
+    "complexity": 3.579189062747278,
+    "cost": 380,
+    "x": 13,
+    "y": -14,
+    "timeOfOrder": 3832
+  },
+  {
+    "complexity": 1.018314987812352,
+    "cost": 255,
+    "x": -9,
+    "y": -8,
+    "timeOfOrder": 4161
+  },
+  {
+    "complexity": 3.07244218308435,
+    "cost": 306,
+    "x": -15,
+    "y": -12,
+    "timeOfOrder": 4178
+  },
+  {
+    "complexity": 4.788854006679323,
+    "cost": 172,
+    "x": 17,
+    "y": 13,
+    "timeOfOrder": 4210
+  },
+  {
+    "complexity": 0.6796732153089841,
+    "cost": 294,
+    "x": 2,
+    "y": -4,
+    "timeOfOrder": 4356
+  },
+  {
+    "complexity": 4.425598017436978,
+    "cost": 148,
+    "x": 10,
+    "y": 2,
+    "timeOfOrder": 4438
+  },
+  {
+    "complexity": 4.403335398853826,
+    "cost": 154,
+    "x": 20,
+    "y": 3,
+    "timeOfOrder": 4565
+  },
+  {
+    "complexity": 2.1219563144173255,
+    "cost": 156,
+    "x": 1,
+    "y": -19,
+    "timeOfOrder": 4687
+  },
+  {
+    "complexity": 1.8362466999671527,
+    "cost": 225,
+    "x": -17,
+    "y": 10,
+    "timeOfOrder": 4813
+  },
+  {
+    "complexity": 1.0571407705014857,
+    "cost": 250,
+    "x": 19,
+    "y": -17,
+    "timeOfOrder": 4882
+  },
+  {
+    "complexity": 2.148134151301957,
+    "cost": 185,
+    "x": -17,
+    "y": 3,
+    "timeOfOrder": 4926
+  },
+  {
+    "complexity": 3.397294988009913,
+    "cost": 243,
+    "x": 18,
+    "y": -12,
+    "timeOfOrder": 5021
+  },
+  {
+    "complexity": 2.831358721862218,
+    "cost": 260,
+    "x": -7,
+    "y": 15,
+    "timeOfOrder": 5043
+  },
+  {
+    "complexity": 2.1410117487789906,
+    "cost": 182,
+    "x": -13,
+    "y": -16,
+    "timeOfOrder": 5095
+  },
+  {
+    "complexity": 1.4887130224638834,
+    "cost": 117,
+    "x": 13,
+    "y": -4,
+    "timeOfOrder": 5222
+  },
+  {
+    "complexity": 1.9676075082523614,
+    "cost": 142,
+    "x": 6,
+    "y": -11,
+    "timeOfOrder": 5485
+  },
+  {
+    "complexity": 4.861011311588511,
+    "cost": 284,
+    "x": -13,
+    "y": -10,
+    "timeOfOrder": 5598
+  },
+  {
+    "complexity": 3.691791786115573,
+    "cost": 192,
+    "x": 2,
+    "y": -4,
+    "timeOfOrder": 5605
+  },
+  {
+    "complexity": 0.3579780912375896,
+    "cost": 265,
+    "x": -3,
+    "y": 10,
+    "timeOfOrder": 5627
+  },
+  {
+    "complexity": 1.847890492234373,
+    "cost": 261,
+    "x": 9,
+    "y": 7,
+    "timeOfOrder": 5793
+  },
+  {
+    "complexity": 4.747182649428182,
+    "cost": 256,
+    "x": 7,
+    "y": 12,
+    "timeOfOrder": 5990
+  },
+  {
+    "complexity": 1.4838743285458849,
+    "cost": 296,
+    "x": -17,
+    "y": -3,
+    "timeOfOrder": 6070
+  },
+  {
+    "complexity": 3.6963105452591054,
+    "cost": 273,
+    "x": 18,
+    "y": 15,
+    "timeOfOrder": 6265
+  },
+  {
+    "complexity": 0.6411201635506009,
+    "cost": 223,
+    "x": -18,
+    "y": 8,
+    "timeOfOrder": 6327
+  },
+  {
+    "complexity": 2.2861478690044086,
+    "cost": 228,
+    "x": -18,
+    "y": 1,
+    "timeOfOrder": 6420
+  },
+  {
+    "complexity": 0.256111351474399,
+    "cost": 161,
+    "x": 17,
+    "y": 2,
+    "timeOfOrder": 6669
+  },
+  {
+    "complexity": 0.03528629706252784,
+    "cost": 250,
+    "x": -3,
+    "y": 7,
+    "timeOfOrder": 6794
+  },
+  {
+    "complexity": 2.2883716158657306,
+    "cost": 245,
+    "x": -8,
+    "y": -6,
+    "timeOfOrder": 6805
+  },
+  {
+    "complexity": 3.6179597995256514,
+    "cost": 249,
+    "x": 1,
+    "y": 18,
+    "timeOfOrder": 6961
+  },
+  {
+    "complexity": 1.3103189476810067,
+    "cost": 155,
+    "x": -16,
+    "y": -9,
+    "timeOfOrder": 7167
+  },
+  {
+    "complexity": 4.045044428481734,
+    "cost": 262,
+    "x": 5,
+    "y": 10,
+    "timeOfOrder": 7427
+  },
+  {
+    "complexity": 0.6038753921795487,
+    "cost": 139,
+    "x": -5,
+    "y": 20,
+    "timeOfOrder": 7545
+  },
+  {
+    "complexity": 2.389890273272393,
+    "cost": 223,
+    "x": -7,
+    "y": -9,
+    "timeOfOrder": 7581
+  },
+  {
+    "complexity": 4.271647692809052,
+    "cost": 137,
+    "x": 19,
+    "y": -18,
+    "timeOfOrder": 7655
+  },
+  {
+    "complexity": 4.566462568068454,
+    "cost": 246,
+    "x": 7,
+    "y": -20,
+    "timeOfOrder": 7817
+  },
+  {
+    "complexity": 1.9198657392028822,
+    "cost": 148,
+    "x": -8,
+    "y": -3,
+    "timeOfOrder": 7853
+  },
+  {
+    "complexity": 1.4441889430129988,
+    "cost": 159,
+    "x": -7,
+    "y": -8,
+    "timeOfOrder": 7921
+  },
+  {
+    "complexity": 3.5615000500649217,
+    "cost": 282,
+    "x": 11,
+    "y": 10,
+    "timeOfOrder": 8001
+  },
+  {
+    "complexity": 3.2414222807751085,
+    "cost": 185,
+    "x": -7,
+    "y": 2,
+    "timeOfOrder": 8158
+  },
+  {
+    "complexity": 1.152357169667504,
+    "cost": 329,
+    "x": -15,
+    "y": 19,
+    "timeOfOrder": 8173
+  },
+  {
+    "complexity": 2.150700435710134,
+    "cost": 310,
+    "x": -9,
+    "y": 10,
+    "timeOfOrder": 8278
+  },
+  {
+    "complexity": 1.0946280296897042,
+    "cost": 270,
+    "x": -3,
+    "y": -18,
+    "timeOfOrder": 8281
+  },
+  {
+    "complexity": 3.7643931180813146,
+    "cost": 314,
+    "x": -13,
+    "y": 11,
+    "timeOfOrder": 8411
+  },
+  {
+    "complexity": 2.2952952726883034,
+    "cost": 224,
+    "x": 17,
+    "y": 14,
+    "timeOfOrder": 8470
+  },
+  {
+    "complexity": 1.0200982823442533,
+    "cost": 202,
+    "x": 8,
+    "y": -14,
+    "timeOfOrder": 8518
+  },
+  {
+    "complexity": 2.2377949883338792,
+    "cost": 130,
+    "x": -3,
+    "y": -12,
+    "timeOfOrder": 8572
+  },
+  {
+    "complexity": 3.0524502115975367,
+    "cost": 152,
+    "x": 2,
+    "y": -19,
+    "timeOfOrder": 9210
+  },
+  {
+    "complexity": 2.330127042815479,
+    "cost": 352,
+    "x": -4,
+    "y": 11,
+    "timeOfOrder": 9243
+  },
+  {
+    "complexity": 2.043427204025331,
+    "cost": 392,
+    "x": 10,
+    "y": 15,
+    "timeOfOrder": 9639
+  },
+  {
+    "complexity": 1.235199296140581,
+    "cost": 268,
+    "x": -6,
+    "y": -9,
+    "timeOfOrder": 9874
+  },
+  {
+    "complexity": 2.614639811636242,
+    "cost": 100,
+    "x": -14,
+    "y": -5,
+    "timeOfOrder": 10043
+  },
+  {
+    "complexity": 4.051518566745873,
+    "cost": 132,
+    "x": -17,
+    "y": 5,
+    "timeOfOrder": 10053
+  },
+  {
+    "complexity": 4.325608089516974,
+    "cost": 267,
+    "x": -3,
+    "y": -8,
+    "timeOfOrder": 10258
+  },
+  {
+    "complexity": 2.5704674686053037,
+    "cost": 328,
+    "x": 0,
+    "y": 9,
+    "timeOfOrder": 10856
+  },
+  {
+    "complexity": 4.683128038551585,
+    "cost": 252,
+    "x": 3,
+    "y": -14,
+    "timeOfOrder": 12345
+  },
+  {
+    "complexity": 4.163811864345309,
+    "cost": 400,
+    "x": -4,
+    "y": -19,
+    "timeOfOrder": 13728
+  }
+]
