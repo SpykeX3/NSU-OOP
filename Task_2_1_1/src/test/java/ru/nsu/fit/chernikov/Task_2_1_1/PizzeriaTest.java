@@ -6,9 +6,4 @@ package ru.nsu.fit.chernikov.Task_2_1_1;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-public class PizzeriaTest {
-  @Test
-  public void testAppHasAGreeting() {
-    Pizzeria classUnderTest = new Pizzeria();
-  }
-}
+public class PizzeriaTest {}

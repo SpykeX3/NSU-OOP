@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.Random;
 
+/** Client is a Thread for making predefined orders on specified time. */
 public class Clients extends Thread {
   private static class OrderConfig implements Comparable<OrderConfig> {
     double complexity;
@@ -36,6 +37,12 @@ public class Clients extends Thread {
   private ArrayList<OrderConfig> oc;
   private long nextId;
 
+  /**
+   * Constructor that parses FileReader as json configuration file.
+   *
+   * @param _pizzeria Pizzeria, where orders should be made.
+   * @param fr FileReader with json config.
+   */
   public Clients(Pizzeria _pizzeria, FileReader fr) {
     Gson gson = new Gson();
     oc = gson.fromJson(fr, new TypeToken<ArrayList<OrderConfig>>() {}.getType());
@@ -56,6 +63,11 @@ public class Clients extends Thread {
         time);
   }
 
+  /**
+   * Generate example configuration.
+   *
+   * @return config example.
+   */
   public static String generate() {
     Gson gson = new GsonBuilder().setPrettyPrinting().create();
     ArrayList<OrderConfig> orderConfigs = new ArrayList<>();
@@ -73,6 +85,7 @@ public class Clients extends Thread {
     return gson.toJson(orderConfigs);
   }
 
+  /** Start making orders in Pizzeria. */
   @Override
   public void run() {
     Instant startTime = Instant.now();

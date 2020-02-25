@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.concurrent.TimeUnit;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
+/** Courier is a Thread that takes orders from Pizzeria warehouse and delivers it to customers. */
 public class Courier extends Thread {
   private double speed;
   private int capacity, x, y;
@@ -12,6 +13,13 @@ public class Courier extends Thread {
   private String name;
   private ArrayList<Order> trunk;
 
+  /**
+   * Courier constructor.
+   *
+   * @param _name name of the courier.
+   * @param _speed distance per second.
+   * @param cap maximum possible number of taken orders.
+   */
   public Courier(String _name, double _speed, int cap) {
     if (speed < 0) {
       throw new IllegalArgumentException("speed must be positive");
@@ -24,6 +32,11 @@ public class Courier extends Thread {
     capacity = cap;
   }
 
+  /**
+   * Set Pizzeria where courier is working.
+   *
+   * @param workplace Pizzeria to set.
+   */
   public void setWorkplace(Pizzeria workplace) {
     this.workplace = workplace;
   }
@@ -36,6 +49,7 @@ public class Courier extends Thread {
     return (Math.abs(x) + Math.abs(y));
   }
 
+  /** Start making deliveries until end of shift. */
   @Override
   public void run() {
 
@@ -79,9 +93,9 @@ public class Courier extends Thread {
         if (workplace.getDateDiff(closest.getOrderDate(), delDate, TimeUnit.MILLISECONDS)
             <= workplace.getDelayLimit()) {
           workplace.checkout(closest.getCost());
-          workplace.log.logDelivered(this, closest,true);
+          workplace.log.logDelivered(this, closest, true);
         } else {
-          workplace.log.logDelivered(this, closest,false);
+          workplace.log.logDelivered(this, closest, false);
         }
         trunk.remove(closest);
       }
@@ -95,6 +109,11 @@ public class Courier extends Thread {
     workplace.log.logCourierShiftEnd(this);
   }
 
+  /**
+   * Get courier name.
+   *
+   * @return name.
+   */
   public String getCName() {
     return name;
   }

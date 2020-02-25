@@ -3,13 +3,20 @@ package ru.nsu.fit.chernikov.Task_2_1_1;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * Class for writing log with number of possible events. Log also collects statistics. Can write in
+ * file or stdout.
+ */
 public class Log {
 
-  static class CookStatistics {
+  private static class CookStatistics {
     double totalComplexity;
     long ordersCompleted;
     long timeSpentWaiting;
@@ -24,7 +31,7 @@ public class Log {
     }
   }
 
-  static class CourierStatistics {
+  private static class CourierStatistics {
     long totalDistance;
     long ordersCompleted;
     long timeSpentWaiting;
@@ -42,6 +49,7 @@ public class Log {
   private BufferedWriter file;
   private ConcurrentHashMap<Cook, CookStatistics> cookStat;
   private ConcurrentHashMap<Courier, CourierStatistics> courierStat;
+  private List<Order> orders;
 
   Log(String _filename) {
     try {
@@ -52,9 +60,11 @@ public class Log {
     }
     cookStat = new ConcurrentHashMap<>();
     courierStat = new ConcurrentHashMap<>();
+    orders = Collections.synchronizedList(new ArrayList<Order>());
   }
 
   Log() {
+    orders = Collections.synchronizedList(new ArrayList<Order>());
     cookStat = new ConcurrentHashMap<>();
     courierStat = new ConcurrentHashMap<>();
   }
@@ -81,21 +91,52 @@ public class Log {
     }
   }
 
-  public void logException(Exception e) {
+  /**
+   * Log occurred exception.
+   *
+   * @param e exception.
+   */
+  void logException(Exception e) {
     print("[" + new Date() + "] " + e.toString());
   }
 
-  public void logCookCame(Cook cook) {
+  /**
+   * Log start of work for cook.
+   *
+   * @param cook actor.
+   */
+  void logCookCame(Cook cook) {
     cookStat.putIfAbsent(cook, new CookStatistics(0, 0, 0, 0));
     print("[" + new Date() + "] Cook " + cook.getCName() + "\" came");
   }
 
-  public void logCourierCame(Courier courier) {
+  /**
+   * Log start of work for courier.
+   *
+   * @param courier actor.
+   */
+  void logCourierCame(Courier courier) {
     courierStat.putIfAbsent(courier, new CourierStatistics(0, 0, 0, 0));
     print("[" + new Date() + "] Courier " + courier.getCName() + "\" came");
   }
 
-  public void logOrderStart(Cook cook, Order order) {
+  /**
+   * Log that order was received.
+   *
+   * @param order new order.
+   */
+  void logOrderReceived(Order order) {
+    print("[" + new Date() + "] Order " + order.getOrderId() + " war received");
+    orders.add(order);
+  }
+
+  /**
+   * Log that order is being processed.
+   *
+   * @param cook actor.
+   * @param order product.
+   */
+  void logOrderStart(Cook cook, Order order) {
     print(
         "["
             + new Date()
@@ -106,7 +147,13 @@ public class Log {
             + "\"");
   }
 
-  public void logDoneCooking(Cook cook, Order order) {
+  /**
+   * Log that cook has finished cooking.
+   *
+   * @param cook actor.
+   * @param order product.
+   */
+  void logDoneCooking(Cook cook, Order order) {
     print(
         "["
             + new Date()
@@ -117,7 +164,13 @@ public class Log {
             + "\"");
   }
 
-  public void logPutInWarehouse(Cook cook, Order order) {
+  /**
+   * Log that cook has put order in warehouse.
+   *
+   * @param cook actor.
+   * @param order product.
+   */
+  void logPutInWarehouse(Cook cook, Order order) {
     print(
         "["
             + new Date()
@@ -128,7 +181,13 @@ public class Log {
             + "\"");
   }
 
-  public void logDeliveryTaken(Courier courier, Order order) {
+  /**
+   * Log that courier has taken an order for delivery.
+   *
+   * @param courier actor.
+   * @param order product.
+   */
+  void logDeliveryTaken(Courier courier, Order order) {
     print(
         "["
             + new Date()
@@ -139,7 +198,14 @@ public class Log {
             + "\"");
   }
 
-  public void logDelivered(Courier courier, Order order, Boolean onTime) {
+  /**
+   * Log that order was delivered by courier. Delivery can be late or on time.
+   *
+   * @param courier actor.
+   * @param order product.
+   * @param onTime true if on time.
+   */
+  void logDelivered(Courier courier, Order order, Boolean onTime) {
     String status;
     double profit = 0;
     if (onTime) {
@@ -177,30 +243,54 @@ public class Log {
                 v.profit + finalProfit));
   }
 
-  public void logCookShiftEnd(Cook cook) {
+  /**
+   * Log that cook has finished shift and left.
+   *
+   * @param cook actor.
+   */
+  void logCookShiftEnd(Cook cook) {
     print("[" + new Date() + "] Cook \"" + cook.getCName() + "\" has left");
   }
 
-  public void logCourierShiftEnd(Courier courier) {
+  /**
+   * Log that courier has finished shift and left.
+   *
+   * @param courier actor.
+   */
+  void logCourierShiftEnd(Courier courier) {
     print("[" + new Date() + "] Courier \"" + courier.getCName() + "\" has left");
   }
 
-  public void logStatistics() {
+  /** Print shift statistics. Should be done after shift has finished. */
+  void logStatistics() {
     print("Cooks:");
-    print(String.format("%15s %10s %7s %8s","Name","Complexity","Orders","Profit"));
+    print(String.format("%15s %10s %7s %8s", "Name", "Complexity", "Orders", "Profit"));
     for (Entry<Cook, CookStatistics> entry : cookStat.entrySet()) {
       Cook cook = entry.getKey();
       CookStatistics stat = entry.getValue();
       print(
-          String.format("%15s %10.2f %7d %8.2f",cook.getCName(), stat.totalComplexity,stat.ordersCompleted, stat.profit));
+          String.format(
+              "%15s %10.2f %7d %8.2f",
+              cook.getCName(), stat.totalComplexity, stat.ordersCompleted, stat.profit));
     }
-    print(System.lineSeparator()+"Couriers:");
-    print(String.format("%15s %10s %7s %8s","Name","Distance","Orders","Profit"));
+    print(System.lineSeparator() + "Couriers:");
+    print(String.format("%15s %10s %7s %8s", "Name", "Distance", "Orders", "Profit"));
     for (Entry<Courier, CourierStatistics> entry : courierStat.entrySet()) {
       Courier courier = entry.getKey();
       CourierStatistics stat = entry.getValue();
       print(
-          String.format("%15s %10d %7d %8.2f",courier.getCName(), stat.totalDistance,stat.ordersCompleted, stat.profit));
+          String.format(
+              "%15s %10d %7d %8.2f",
+              courier.getCName(), stat.totalDistance, stat.ordersCompleted, stat.profit));
+    }
+    for (Order ord : orders) {
+      if (ord.getCook() == null) {
+        print("Order " + ord.getOrderId() + " was ignored");
+      } else if (ord.getCourier() == null) {
+        print("Order " + ord.getOrderId() + " was cooked but not delivered");
+      } else{
+        print("Order " + ord.getOrderId() + " was delivered");
+      }
     }
   }
 }

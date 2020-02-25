@@ -1,22 +1,36 @@
 package ru.nsu.fit.chernikov.Task_2_1_1;
 
 import com.google.gson.annotations.Expose;
+
 import java.util.Date;
 
+/** Cook is a Thread that extracts orders from Pizzeria, processes it and puts it in warehouse. */
 public class Cook extends Thread {
   private String name;
   private double timePerUnit;
   private Pizzeria workplace;
 
+  /**
+   * Cook constructor.
+   *
+   * @param _name name of the cook.
+   * @param _timePerUnit time to process 1 unit of order complexity.
+   */
   public Cook(String _name, double _timePerUnit) {
     timePerUnit = _timePerUnit;
     name = _name;
   }
 
+  /**
+   * Set Pizzeria, where cook is working. Must be set before thread is started.
+   *
+   * @param workplace workplace to set.
+   */
   public void setWorkplace(Pizzeria workplace) {
     this.workplace = workplace;
   }
 
+  /** Start taking and processing orders. Workplace must be already set. */
   @Override
   public void run() {
 
@@ -48,6 +62,11 @@ public class Cook extends Thread {
     workplace.log.logCookShiftEnd(this);
   }
 
+  /**
+   * Get cook name.
+   *
+   * @return name of the cook.
+   */
   public String getCName() {
     return name;
   }

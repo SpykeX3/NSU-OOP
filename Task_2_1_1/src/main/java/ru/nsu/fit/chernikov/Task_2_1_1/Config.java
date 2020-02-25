@@ -6,23 +6,24 @@ import java.util.ArrayList;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+/** Utility class for creating Pizzeria using configuration json file. */
 public class Config {
   static class CookConfig {
-    public String name;
-    public double tpu;
+    String name;
+    double tpu;
 
-    public CookConfig(String _name, int _tpu) {
+    CookConfig(String _name, int _tpu) {
       name = _name;
       tpu = _tpu;
     }
   }
 
   static class CourierConfig {
-    public String name;
-    public double speed;
-    public int cap;
+    String name;
+    double speed;
+    int cap;
 
-    public CourierConfig(String _name, double _speed, int _cap) {
+    CourierConfig(String _name, double _speed, int _cap) {
       name = _name;
       speed = _speed;
       cap = _cap;
@@ -30,27 +31,38 @@ public class Config {
   }
 
   static class PizzeriaConfig {
-    public long shiftLenS;
-    public long delayMS;
-    public int warehouseCap;
-    public ArrayList<CookConfig> cookConfigs;
-    public ArrayList<CourierConfig> courierConfigs;
+    long shiftLenS;
+    long delayMS;
+    int warehouseCap;
+    ArrayList<CookConfig> cookConfigs;
+    ArrayList<CourierConfig> courierConfigs;
   }
 
-  public static Pizzeria parse(FileReader fr) {
+  /**
+   * Create new Pizzeria using configuration file.
+   *
+   * @param fr FileReader containing json configuration.
+   * @return created Pizzeria.
+   */
+  static Pizzeria parse(FileReader fr) {
     Gson gson = new Gson();
-    PizzeriaConfig pc = gson.fromJson(fr,PizzeriaConfig.class);
+    PizzeriaConfig pc = gson.fromJson(fr, PizzeriaConfig.class);
     ArrayList<Cook> cooks = new ArrayList<>();
     ArrayList<Courier> couriers = new ArrayList<>();
-    for (CookConfig cc: pc.cookConfigs) {
-        cooks.add(new Cook(cc.name,cc.tpu));
+    for (CookConfig cc : pc.cookConfigs) {
+      cooks.add(new Cook(cc.name, cc.tpu));
     }
-    for (CourierConfig cc: pc.courierConfigs) {
-        couriers.add(new Courier(cc.name,cc.speed,cc.cap));
+    for (CourierConfig cc : pc.courierConfigs) {
+      couriers.add(new Courier(cc.name, cc.speed, cc.cap));
     }
-    return new Pizzeria(cooks,couriers,pc.warehouseCap,pc.delayMS,pc.shiftLenS);
+    return new Pizzeria(cooks, couriers, pc.warehouseCap, pc.delayMS, pc.shiftLenS);
   }
 
+  /**
+   * Generate example configuration json.
+   *
+   * @return example json string.
+   */
   public static String example() {
     Gson gson = new GsonBuilder().setPrettyPrinting().create();
     PizzeriaConfig pc = new PizzeriaConfig();

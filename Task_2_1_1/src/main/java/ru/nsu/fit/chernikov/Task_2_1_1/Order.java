@@ -2,6 +2,10 @@ package ru.nsu.fit.chernikov.Task_2_1_1;
 
 import java.util.Date;
 
+/**
+ * Order is a request to produce and deliver products of specified complexity and cost to specified
+ * location.
+ */
 public class Order {
 
   private double complexity;
@@ -12,6 +16,17 @@ public class Order {
   private Cook cook;
   private Courier courier;
 
+
+  /**
+   * Order constructor.
+   *
+   * @param _complexity complexity of order.
+   * @param _cost cost of order.
+   * @param _orderId identifier of order.
+   * @param _orderDate time when order was made.
+   * @param xCoord x coordinate of destination.
+   * @param yCoord y coordinate of destination.
+   */
   public Order(
       double _complexity, long _cost, long _orderId, Date _orderDate, int xCoord, int yCoord) {
     complexity = _complexity;

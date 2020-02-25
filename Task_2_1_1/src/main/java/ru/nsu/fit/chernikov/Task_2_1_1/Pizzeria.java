@@ -13,6 +13,9 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Pizzeria is a system that gets orders, produces them and delivers. It must have cook and courier.
+ */
 public class Pizzeria {
   private BlockingQueue<Order> pendingOrders;
   private BlockingQueue<Order> warehouse;
@@ -31,6 +34,11 @@ public class Pizzeria {
 
   private double income;
 
+  /**
+   * Method for cooks. Extracts order from queue.
+   *
+   * @return order or null if shift has ended.
+   */
   Order takeCookingOrder() {
     Order take = null;
     try {
@@ -41,6 +49,12 @@ public class Pizzeria {
     return take;
   }
 
+  /**
+   * Puts ready order in warehouse.
+   *
+   * @param order product to store.
+   * @return true if order was put, false if shift has ended.
+   */
   boolean putInWarehouse(Order order) {
     boolean res = false;
     try {
@@ -51,16 +65,12 @@ public class Pizzeria {
     return res;
   }
 
-  Order takeDeliveryOrder() {
-    Order take = null;
-    try {
-      take = warehouse.take();
-    } catch (InterruptedException e) {
-      log.logException(e);
-    }
-    return take;
-  }
-
+  /**
+   * Take orders from warehouse.
+   *
+   * @param capacity maximum number of orders to take.
+   * @return list of taken orders.
+   */
   ArrayList<Order> fillTrunk(int capacity) {
     if (capacity <= 0) {
       throw new IllegalArgumentException("capacity must be positive");
@@ -86,16 +96,35 @@ public class Pizzeria {
     return trunk;
   }
 
+  /**
+   * Register payment.
+   *
+   * @param payment recieved payment.
+   */
   synchronized void checkout(double payment) {
     income += payment;
   }
 
+  /**
+   * Set end of shift in delta seconds from now.
+   *
+   * @param delta length of shift in seconds.
+   */
   private void setShiftEnd(long delta) {
     Date now = new Date();
     long end = now.getTime() + delta * 1000;
     shiftEnd = new Date(end);
   }
 
+  /**
+   * Pizzeria constructor.
+   *
+   * @param _cooks list of cooks.
+   * @param _couriers list of couriers.
+   * @param whLimit warehouse limit.
+   * @param delayLim acceptable time to deliver product.
+   * @param shiftLen shift duration in seconds.
+   */
   public Pizzeria(
       ArrayList<Cook> _cooks,
       ArrayList<Courier> _couriers,
@@ -111,6 +140,7 @@ public class Pizzeria {
     log = new Log();
   }
 
+  /** Run Pizzeria. Prints log while running. */
   public void run() {
     setShiftEnd(shiftLength);
     for (Cook c : cooks) {
@@ -138,7 +168,13 @@ public class Pizzeria {
     log.logStatistics();
   }
 
+  /**
+   * Place new order.
+   *
+   * @param order request.
+   */
   public void addOrder(Order order) {
+    log.logOrderReceived(order);
     try {
       pendingOrders.put(order);
     } catch (InterruptedException e) {
@@ -146,11 +182,24 @@ public class Pizzeria {
     }
   }
 
-  public long getDateDiff(Date date1, Date date2, TimeUnit timeUnit) {
+  /**
+   * Calculate difference between two dates.
+   *
+   * @param date1 before date.
+   * @param date2 after date.
+   * @param timeUnit unit of time measurement.
+   * @return difference in selected units.
+   */
+  long getDateDiff(Date date1, Date date2, TimeUnit timeUnit) {
     long diffInMillis = date2.getTime() - date1.getTime();
     return timeUnit.convert(diffInMillis, TimeUnit.MILLISECONDS);
   }
 
+  /**
+   * Get time until end of shift in milliseconds.
+   *
+   * @return time until end of shift.
+   */
   public long timeUntilShiftEnd() {
     Date now = new Date();
     return getDateDiff(now, shiftEnd, TimeUnit.MILLISECONDS);
@@ -164,6 +213,11 @@ public class Pizzeria {
     return delayLimit;
   }
 
+  /**
+   * Example Pizzeria program.
+   *
+   * @param args unused :(
+   */
   public static void main(String[] args) {
     File flPizza = new File("src/main/resources/configPizzeria.json");
     File flClients = new File("src/main/resources/configClients.json");
