@@ -28,10 +28,10 @@ public class PizzeriaTest {
     } catch (IOException e) {
       fail();
     }
-    assertTrue(pz.log.getExceptionCount() > 0);
-    assertEquals(pz.log.getOrders().size(), 65);
-    assertEquals(pz.log.getCookStat().size(), 3);
-    assertEquals(pz.log.getCourierStat().size(), 3);
+    assertEquals(0, pz.log.getExceptionCount());
+    assertEquals(65, pz.log.getOrders().size());
+    assertEquals(3, pz.log.getCookStat().size());
+    assertEquals(3, pz.log.getCourierStat().size());
     double cookProf =
         pz.log.getCookStat().entrySet().stream()
             .map(Map.Entry::getValue)
