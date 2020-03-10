@@ -16,7 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class Log {
 
-  private static class CookStatistics {
+  static class CookStatistics {
     double totalComplexity;
     long ordersCompleted;
     long timeSpentWaiting;
@@ -31,7 +31,7 @@ public class Log {
     }
   }
 
-  private static class CourierStatistics {
+  static class CourierStatistics {
     long totalDistance;
     long ordersCompleted;
     long timeSpentWaiting;
@@ -50,6 +50,7 @@ public class Log {
   private ConcurrentHashMap<Cook, CookStatistics> cookStat;
   private ConcurrentHashMap<Courier, CourierStatistics> courierStat;
   private List<Order> orders;
+  private long exceptionCount;
 
   Log(String _filename) {
     try {
@@ -91,6 +92,14 @@ public class Log {
     }
   }
 
+  private synchronized void incExceptions() {
+    exceptionCount++;
+  }
+
+  public long getExceptionCount() {
+    return exceptionCount;
+  }
+
   /**
    * Log occurred exception.
    *
@@ -98,6 +107,7 @@ public class Log {
    */
   void logException(Exception e) {
     print("[" + new Date() + "] " + e.toString());
+    incExceptions();
   }
 
   /**
@@ -288,9 +298,21 @@ public class Log {
         print("Order " + ord.getOrderId() + " was ignored");
       } else if (ord.getCourier() == null) {
         print("Order " + ord.getOrderId() + " was cooked but not delivered");
-      } else{
+      } else {
         print("Order " + ord.getOrderId() + " was delivered");
       }
     }
+  }
+
+  public ConcurrentHashMap<Cook, CookStatistics> getCookStat() {
+    return cookStat;
+  }
+
+  public ConcurrentHashMap<Courier, CourierStatistics> getCourierStat() {
+    return courierStat;
+  }
+
+  public List<Order> getOrders() {
+    return orders;
   }
 }

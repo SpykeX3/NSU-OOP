@@ -4,6 +4,44 @@
 package ru.nsu.fit.chernikov.Task_2_1_1;
 
 import org.junit.Test;
+
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.AbstractMap;
+import java.util.Map;
+
 import static org.junit.Assert.*;
 
-public class PizzeriaTest {}
+public class PizzeriaTest {
+
+  @Test
+  public void testIntegrity() {
+    File flPizza = new File("src/test/resources/configPizzeria.json");
+    File flClients = new File("src/test/resources/configClients.json");
+    Pizzeria pz = null;
+    try {
+      pz = Config.parse(new FileReader(flPizza));
+      Clients cl = new Clients(pz, new FileReader(flClients));
+      cl.start();
+      pz.run();
+    } catch (IOException e) {
+      fail();
+    }
+    assertTrue(pz.log.getExceptionCount() > 0);
+    assertEquals(pz.log.getOrders().size(), 65);
+    assertEquals(pz.log.getCookStat().size(), 3);
+    assertEquals(pz.log.getCourierStat().size(), 3);
+    double cookProf =
+        pz.log.getCookStat().entrySet().stream()
+            .map(Map.Entry::getValue)
+            .map(e -> e.profit)
+            .reduce(0., Double::sum);
+    double courierProf =
+        pz.log.getCourierStat().entrySet().stream()
+            .map(Map.Entry::getValue)
+            .map(e -> e.profit)
+            .reduce(0., Double::sum);
+    assertEquals(courierProf, cookProf, 0.01);
+  }
+}
