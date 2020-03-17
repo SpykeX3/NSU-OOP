@@ -6,6 +6,11 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
+/**
+ * Concurrent queue container. Can de bounded or unbounded.
+ *
+ * @param <T> type to store.
+ */
 public class BQueue<T> {
   private ReentrantLock lock;
   private Condition notEmpty;
@@ -13,6 +18,7 @@ public class BQueue<T> {
   private long cap;
   private LinkedList<T> queue;
 
+  /** Unbounded constructor. */
   public BQueue() {
     cap = Long.MAX_VALUE;
     lock = new ReentrantLock();
@@ -21,6 +27,11 @@ public class BQueue<T> {
     queue = new LinkedList<>();
   }
 
+  /**
+   * Bounded constructor.
+   *
+   * @param _cap capacity.
+   */
   public BQueue(long _cap) {
     cap = _cap;
     lock = new ReentrantLock();
@@ -29,6 +40,11 @@ public class BQueue<T> {
     queue = new LinkedList<>();
   }
 
+  /**
+   * Take first element, removing it. Will wait until not empty.
+   *
+   * @return first element or null if interrupted.
+   */
   T take() {
     lock.lock();
     T elem;
@@ -48,6 +64,12 @@ public class BQueue<T> {
     return elem;
   }
 
+  /**
+   * Take first element, removing it. Will wait until not empty but only for specified time.
+   *
+   * @param millisec maximum wait time in milliseconds.
+   * @return first element and null if interrupted or if time is out.
+   */
   T take(long millisec) {
     lock.lock();
     T elem = null;
@@ -71,6 +93,12 @@ public class BQueue<T> {
     return elem;
   }
 
+  /**
+   * Put element as last. Will wait until queue is not full.
+   *
+   * @param elem element to place.
+   * @return true if placed successfully, false otherwise.
+   */
   boolean put(T elem) {
     lock.lock();
     boolean res = true;
@@ -90,6 +118,13 @@ public class BQueue<T> {
     return res;
   }
 
+  /**
+   * Put element as last. Will wait until queue is not full for specified time.
+   *
+   * @param elem element to place.
+   * @param millisec timeout in milliseconds.
+   * @return true if placed successfully, false otherwise.
+   */
   boolean put(T elem, long millisec) {
     lock.lock();
     boolean res = true;
