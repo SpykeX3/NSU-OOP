@@ -17,8 +17,8 @@ import java.util.concurrent.TimeUnit;
  * Pizzeria is a system that gets orders, produces them and delivers. It must have cook and courier.
  */
 public class Pizzeria {
-  private BlockingQueue<Order> pendingOrders;
-  private BlockingQueue<Order> warehouse;
+  private BQueue<Order> pendingOrders;
+  private BQueue<Order> warehouse;
 
   private ArrayList<Cook> cooks;
 
@@ -41,11 +41,7 @@ public class Pizzeria {
    */
   Order takeCookingOrder() {
     Order take = null;
-    try {
-      take = pendingOrders.poll(timeUntilShiftEnd(), TimeUnit.MILLISECONDS);
-    } catch (InterruptedException e) {
-      log.logException(e);
-    }
+    take = pendingOrders.take(timeUntilShiftEnd());
     return take;
   }
 
@@ -57,11 +53,7 @@ public class Pizzeria {
    */
   boolean putInWarehouse(Order order) {
     boolean res = false;
-    try {
-      res = warehouse.offer(order, timeUntilShiftEnd(), TimeUnit.MILLISECONDS);
-    } catch (InterruptedException e) {
-      log.logException(e);
-    }
+    res = warehouse.put(order);
     return res;
   }
 
@@ -76,21 +68,17 @@ public class Pizzeria {
       throw new IllegalArgumentException("capacity must be positive");
     }
     ArrayList<Order> trunk = new ArrayList<>(capacity);
-    try {
-      Order nextOrder = warehouse.poll(timeUntilShiftEnd(), TimeUnit.MILLISECONDS);
-      if (nextOrder != null) {
-        trunk.add(nextOrder);
-        capacity--;
-      }
-    } catch (InterruptedException e) {
-      log.logException(e);
+    Order nextOrder = warehouse.take(timeUntilShiftEnd());
+    if (nextOrder != null) {
+      trunk.add(nextOrder);
+      capacity--;
     }
     while (capacity > 0) {
-      Order nextOrder = warehouse.poll();
-      if (nextOrder == null) {
+      Order nextNWOrder = warehouse.take(1);
+      if (nextNWOrder == null) {
         break;
       }
-      trunk.add(nextOrder);
+      trunk.add(nextNWOrder);
       capacity--;
     }
     return trunk;
@@ -110,7 +98,7 @@ public class Pizzeria {
    *
    * @param delta length of shift in seconds.
    */
-  private void setShiftEnd(long delta) {
+  void setShiftEnd(long delta) {
     Date now = new Date();
     long end = now.getTime() + delta * 1000;
     shiftEnd = new Date(end);
@@ -133,8 +121,8 @@ public class Pizzeria {
       long shiftLen) {
     cooks = _cooks;
     couriers = _couriers;
-    warehouse = new ArrayBlockingQueue<>(whLimit, true);
-    pendingOrders = new LinkedBlockingQueue<>();
+    warehouse = new BQueue<>(whLimit);
+    pendingOrders = new BQueue<>();
     delayLimit = delayLim;
     shiftLength = shiftLen;
     log = new Log();
@@ -175,11 +163,7 @@ public class Pizzeria {
    */
   public void addOrder(Order order) {
     log.logOrderReceived(order);
-    try {
-      pendingOrders.put(order);
-    } catch (InterruptedException e) {
-      log.logException(e);
-    }
+    pendingOrders.put(order);
   }
 
   /**
@@ -187,12 +171,11 @@ public class Pizzeria {
    *
    * @param date1 before date.
    * @param date2 after date.
-   * @param timeUnit unit of time measurement.
    * @return difference in selected units.
    */
-  long getDateDiff(Date date1, Date date2, TimeUnit timeUnit) {
+  long getDateDiff(Date date1, Date date2) {
     long diffInMillis = date2.getTime() - date1.getTime();
-    return timeUnit.convert(diffInMillis, TimeUnit.MILLISECONDS);
+    return TimeUnit.MILLISECONDS.convert(diffInMillis, TimeUnit.MILLISECONDS);
   }
 
   /**
@@ -202,7 +185,7 @@ public class Pizzeria {
    */
   public long timeUntilShiftEnd() {
     Date now = new Date();
-    return getDateDiff(now, shiftEnd, TimeUnit.MILLISECONDS);
+    return getDateDiff(now, shiftEnd);
   }
 
   public Date getShiftEnd() {

@@ -235,14 +235,16 @@ public class Log {
             + courier.getCName()
             + "\"");
     double finalProfit = profit;
-    cookStat.computeIfPresent(
-        order.getCook(),
-        (k, v) ->
-            new CookStatistics(
-                v.totalComplexity + order.getComplexity(),
-                v.ordersCompleted + 1,
-                v.timeSpentWaiting,
-                v.profit + finalProfit));
+    if (order.getCook() != null) {
+      cookStat.computeIfPresent(
+          order.getCook(),
+          (k, v) ->
+              new CookStatistics(
+                  v.totalComplexity + order.getComplexity(),
+                  v.ordersCompleted + 1,
+                  v.timeSpentWaiting,
+                  v.profit + finalProfit));
+    }
     courierStat.computeIfPresent(
         order.getCourier(),
         (k, v) ->

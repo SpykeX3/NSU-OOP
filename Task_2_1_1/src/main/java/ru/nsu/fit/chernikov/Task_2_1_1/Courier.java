@@ -2,8 +2,6 @@ package ru.nsu.fit.chernikov.Task_2_1_1;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.concurrent.TimeUnit;
-import org.checkerframework.checker.nullness.qual.NonNull;
 
 /** Courier is a Thread that takes orders from Pizzeria warehouse and delivers it to customers. */
 public class Courier extends Thread {
@@ -90,7 +88,7 @@ public class Courier extends Thread {
         x = closest.getX();
         y = closest.getY();
         Date delDate = new Date();
-        if (workplace.getDateDiff(closest.getOrderDate(), delDate, TimeUnit.MILLISECONDS)
+        if (workplace.getDateDiff(closest.getOrderDate(), delDate)
             <= workplace.getDelayLimit()) {
           workplace.checkout(closest.getCost());
           workplace.log.logDelivered(this, closest, true);

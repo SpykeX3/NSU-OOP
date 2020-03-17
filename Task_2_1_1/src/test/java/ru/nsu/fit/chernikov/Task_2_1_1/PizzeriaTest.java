@@ -9,6 +9,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.Map;
 
 import static org.junit.Assert.*;
@@ -43,5 +45,33 @@ public class PizzeriaTest {
             .map(e -> e.profit)
             .reduce(0., Double::sum);
     assertEquals(courierProf, cookProf, 0.01);
+  }
+
+  @Test
+  public void pendingOrders() {
+    Pizzeria pz = new Pizzeria(new ArrayList<>(), new ArrayList<>(), 1, 0, 10);
+    pz.setShiftEnd(10);
+    pz.addOrder(new Order(1, 1, 1, new Date(), 1, 1));
+    pz.addOrder(new Order(2, 1, 1, new Date(), 1, 1));
+    pz.addOrder(new Order(3, 1, 1, new Date(), 1, 1));
+    Order o1 = pz.takeCookingOrder();
+    Order o2 = pz.takeCookingOrder();
+    Order o3 = pz.takeCookingOrder();
+    assertEquals(o1.getComplexity(), 1, 0.1);
+    assertEquals(o2.getComplexity(), 2, 0.1);
+    assertEquals(o3.getComplexity(), 3, 0.1);
+  }
+
+  @Test
+  public void warehouseOrders() {
+    Pizzeria pz = new Pizzeria(new ArrayList<>(), new ArrayList<>(), 3, 0, 10);
+    pz.setShiftEnd(10);
+    pz.putInWarehouse(new Order(1, 1, 1, new Date(), 1, 1));
+    pz.putInWarehouse(new Order(2, 1, 1, new Date(), 1, 1));
+    pz.putInWarehouse(new Order(3, 1, 1, new Date(), 1, 1));
+    ArrayList<Order> al = pz.fillTrunk(3);
+    assertEquals(al.get(0).getComplexity(), 1, 0.1);
+    assertEquals(al.get(1).getComplexity(), 2, 0.1);
+    assertEquals(al.get(2).getComplexity(), 3, 0.1);
   }
 }
