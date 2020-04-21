@@ -6,6 +6,7 @@ package ru.nsu.fit.chernikov.Task_2_1_1;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -53,7 +54,7 @@ public class Pizzeria {
    */
   boolean putInWarehouse(Order order) {
     boolean res = false;
-    res = warehouse.put(order,timeUntilShiftEnd());
+    res = warehouse.put(order, timeUntilShiftEnd());
     return res;
   }
 
@@ -156,7 +157,7 @@ public class Pizzeria {
     log.setWaitingForNewOrders(pendingOrders.getWaitingEmpty());
     log.setWaitingForNotEmptyWarehouse(warehouse.getWaitingEmpty());
     log.setWaitingForNotFullWarehouse(warehouse.getWaitingFull());
-    log.logStatistics();
+    log.logStatistics(Duration.ofSeconds(shiftLength));
   }
 
   /**

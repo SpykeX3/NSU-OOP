@@ -39,7 +39,7 @@ public class SmartBQueue<T> extends BQueue<T> {
     notFull = lock.newCondition();
     queue = new LinkedList<>();
     waitingEmpty = Duration.ofSeconds(0);
-    waitingFull = Duration.ofSeconds(0);
+    waitingFull = Duration.ZERO;
   }
 
   /**
@@ -114,8 +114,7 @@ public class SmartBQueue<T> extends BQueue<T> {
       while (queue.size() == cap) {
         Instant timeAwaiting = Instant.now();
         notFull.await();
-        waitingFull = waitingEmpty.plus(Duration.between(timeAwaiting, Instant.now()));
-        System.out.println("Was waiting. Total waiting time is : "+waitingFull.toMillis());
+        waitingFull = waitingFull.plus(Duration.between(timeAwaiting, Instant.now()));
       }
       queue.addFirst(elem);
       notEmpty.signal();

@@ -35,13 +35,19 @@ public class Log {
   static class CourierStatistics {
     long totalDistance;
     long ordersCompleted;
+    long profitableOrdersCompleted;
     long timeSpentWaiting;
     double profit;
 
     CourierStatistics(
-        long _totalDistance, long _ordersCompleted, long _timeSpentWaiting, double _profit) {
+        long _totalDistance,
+        long _ordersCompleted,
+        long _profitableOrdersCompleted,
+        long _timeSpentWaiting,
+        double _profit) {
       totalDistance = _totalDistance;
       ordersCompleted = _ordersCompleted;
+      profitableOrdersCompleted = _profitableOrdersCompleted;
       timeSpentWaiting = _timeSpentWaiting;
       profit = _profit;
     }
@@ -130,7 +136,7 @@ public class Log {
    * @param courier actor.
    */
   void logCourierCame(Courier courier) {
-    courierStat.putIfAbsent(courier, new CourierStatistics(0, 0, 0, 0));
+    courierStat.putIfAbsent(courier, new CourierStatistics(0, 0, 0, 0, 0));
     print("[" + new Date() + "] Courier " + courier.getCName() + "\" came");
   }
 
@@ -225,8 +231,28 @@ public class Log {
     if (onTime) {
       status = "on time";
       profit = order.getCost();
+      double finalProfit1 = profit;
+      courierStat.computeIfPresent(
+          order.getCourier(),
+          (k, v) ->
+              new CourierStatistics(
+                  v.totalDistance + Math.abs(order.getX()) + Math.abs(order.getY()),
+                  v.ordersCompleted + 1,
+                  v.profitableOrdersCompleted + 1,
+                  v.timeSpentWaiting,
+                  v.profit + finalProfit1));
     } else {
       status = "late";
+      double finalProfit2 = profit;
+      courierStat.computeIfPresent(
+          order.getCourier(),
+          (k, v) ->
+              new CourierStatistics(
+                  v.totalDistance + Math.abs(order.getX()) + Math.abs(order.getY()),
+                  v.ordersCompleted + 1,
+                  v.profitableOrdersCompleted,
+                  v.timeSpentWaiting,
+                  v.profit + finalProfit2));
     }
     print(
         "["
@@ -238,8 +264,8 @@ public class Log {
             + " by \""
             + courier.getCName()
             + "\"");
-    double finalProfit = profit;
     if (order.getCook() != null) {
+      double finalProfit = profit;
       cookStat.computeIfPresent(
           order.getCook(),
           (k, v) ->
@@ -249,14 +275,6 @@ public class Log {
                   v.timeSpentWaiting,
                   v.profit + finalProfit));
     }
-    courierStat.computeIfPresent(
-        order.getCourier(),
-        (k, v) ->
-            new CourierStatistics(
-                v.totalDistance + Math.abs(order.getX()) + Math.abs(order.getY()),
-                v.ordersCompleted + 1,
-                v.timeSpentWaiting,
-                v.profit + finalProfit));
   }
 
   /**
@@ -278,7 +296,7 @@ public class Log {
   }
 
   /** Print shift statistics. Should be done after shift has finished. */
-  void logStatistics() {
+  void logStatistics(Duration shiftLen) {
     print("Cooks:");
     print(String.format("%15s %10s %7s %8s", "Name", "Complexity", "Orders", "Profit"));
     for (Entry<Cook, CookStatistics> entry : cookStat.entrySet()) {
@@ -306,7 +324,7 @@ public class Log {
       print("\tWaiting for new orders: " + waitingForNewOrders.toMillis() + "ms");
       print("Warehouse statistics:");
       print("\tCouriers waiting for deliveries:\t" + waitingForNotEmptyWarehouse.toMillis() + "ms");
-      print("\tCooks waiting for free space:\t" + waitingForNotEmptyWarehouse.toMillis() + "ms");
+      print("\tCooks waiting for free space:\t" + waitingForNotFullWarehouse.toMillis() + "ms");
     }
 
     print("Orders:");
@@ -319,6 +337,11 @@ public class Log {
         print("Order " + ord.getOrderId() + " was delivered");
       }
     }
+    print("Advise:");
+    logCookAdvice();
+    logCourierAdvice();
+    logWarehouseAdvice(shiftLen);
+
   }
 
   public ConcurrentHashMap<Cook, CookStatistics> getCookStat() {
@@ -343,5 +366,98 @@ public class Log {
 
   public void setWaitingForNotFullWarehouse(Duration waitingForNotFullWarehouse) {
     this.waitingForNotFullWarehouse = waitingForNotFullWarehouse;
+  }
+
+  private void logCookAdvice(){
+    double totalComplexity =
+            orders.stream().mapToDouble(Order::getComplexity).reduce(0, Double::sum);
+    double managedComplexity =
+            cookStat.values().stream().mapToDouble(cs -> cs.totalComplexity).reduce(0, Double::sum);
+    double mvpComplexity =
+            cookStat.values().stream().mapToDouble(cs -> cs.totalComplexity).max().orElse(0);
+    if (cookStat.size() == 0) {
+      print("Come on, you don't even have cooks. Hire someone.");
+    } else {
+      Entry<Cook, CookStatistics> mvp =
+              cookStat.entrySet().stream()
+                      .filter(e -> e.getValue().totalComplexity == mvpComplexity)
+                      .findFirst()
+                      .orElse(null);
+      if (totalComplexity == 0) {
+        print("You really don't need your cooks. Even a monkey would manage.");
+      } else {
+        double cookEff = managedComplexity / totalComplexity;
+        if (cookEff == 1) {
+          print("You may fire some cooks or change them for more cheap ones.");
+        } else if (cookEff > 0.9) {
+          print("Cooks are fine.");
+        } else if (cookEff > 0.7) {
+          print("Hire some new cooks.");
+        } else {
+          print("You really need more cooks.");
+        }
+      }
+    }
+  }
+
+  private void logCourierAdvice(){
+    double managedDelivery =
+            courierStat.values().stream().mapToDouble(cs -> cs.ordersCompleted).sum();
+    double profitDelivery = courierStat.values().stream().mapToDouble(cs -> cs.profit).sum();
+    double profitDeliveryCount = courierStat.values().stream().mapToDouble(cs -> cs.profit).sum();
+    double totalDistance =
+            orders.stream().mapToDouble(s -> Math.sqrt(s.getX() ^ 2 + s.getY() ^ 2)).sum();
+    double totalDistanceOfCooked =
+            orders.stream()
+                    .filter(s -> s.getCook() != null)
+                    .mapToDouble(s -> Math.sqrt(s.getX() ^ 2 + s.getY() ^ 2))
+                    .sum();
+    long cookedOrders = orders.stream().filter(s -> s.getCook() != null).count();
+    if (totalDistance == 0) {
+      print("All orders were made within pizzeria. Leave one mots cheap courier.");
+    } else {
+      double courEff = totalDistanceOfCooked / totalDistance;
+      if (courEff == 1) {
+        print("You have enough couriers. Maybe even too many.");
+      } else if (courEff > 0.8) {
+        print("Hire some more couriers");
+      } else {
+        print("You need to increase delivery capabilities!");
+      }
+      double profitEff = (double)profitDeliveryCount/cookedOrders;
+      if(profitEff==1){
+        print("Your couriers are fast enough");
+      }else if(profitEff>0.9){
+        print("Train a couple couriers and cooks to be more efficient.");
+      }else if(profitEff>0.7){
+        print("You loose profit. Make your deliveries faster.");
+      }else{
+        print("Your system is not fine. Cooks and Couriers are not able to get profit. Maybe you should increase time window?");
+      }
+    }
+  }
+
+  private void logWarehouseAdvice(Duration sl){
+    double waitingE = waitingForNotEmptyWarehouse.toMillis()/(double)sl.toMillis();
+    double waitingF = waitingForNotFullWarehouse.toMillis()/(double)sl.toMillis();
+    if(waitingE>1){
+      print("Couriers have spent a lot of time in pizzeria waiting for new deliveries. Try improving cooks' productivity or invest in advertisement of your pizzeria if cooks are fine.");
+    }else if(waitingE>0.5){
+      print("Couriers have spent some time in pizzeria waiting for new deliveries. Train a couple of cooks or spend some money advertising of your pizzeria if cooks are fine.");
+    }else if(waitingE>0.2){
+      print("Couriers have spent a little time in pizzeria waiting for new deliveries. No need for heavy improvement.");
+    }else{
+      print("Couriers have spent very little time in pizzeria waiting for new deliveries. Balance seems fine.");
+    }
+
+    if(waitingF>1){
+      print("Cooks have spent a lot of time waiting for space in the warehouse. Critical need for more/better couriers or increase in storage capacity.");
+    }else if(waitingF>0.5){
+      print("Cooks have spent some time waiting for space in the warehouse. You should improve couriers or increase storage.");
+    }else if(waitingF>0.1){
+      print("Cooks have spent a little time waiting for space in the warehouse. No need for heavy improvement, but larger warehouse wouldn't hurt.");
+    }else{
+      print("Cooks have spent very little time waiting for space in the warehouse. Balance seems fine.");
+    }
   }
 }
