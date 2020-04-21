@@ -58,9 +58,9 @@ public class Log {
   private ConcurrentHashMap<Courier, CourierStatistics> courierStat;
   private List<Order> orders;
   private long exceptionCount;
-  Duration waitingForNewOrders;
-  Duration waitingForNotEmptyWarehouse;
-  Duration waitingForNotFullWarehouse;
+  private Duration waitingForNewOrders;
+  private Duration waitingForNotEmptyWarehouse;
+  private Duration waitingForNotFullWarehouse;
 
   Log(String _filename) {
     try {
@@ -337,7 +337,7 @@ public class Log {
         print("Order " + ord.getOrderId() + " was delivered");
       }
     }
-    print("Advise:");
+    print("\nAdvise:\n");
     logCookAdvice();
     logCourierAdvice();
     logWarehouseAdvice(shiftLen);

@@ -75,7 +75,7 @@ public class Pizzeria {
       capacity--;
     }
     while (capacity > 0) {
-      Order nextNWOrder = warehouse.take(1);
+      Order nextNWOrder = warehouse.take(10);
       if (nextNWOrder == null) {
         break;
       }
@@ -127,11 +127,11 @@ public class Pizzeria {
     delayLimit = delayLim;
     shiftLength = shiftLen;
     log = new Log();
+    setShiftEnd(shiftLength);
   }
 
   /** Run Pizzeria. Prints log while running. */
   public void run() {
-    setShiftEnd(shiftLength);
     for (Cook c : cooks) {
       c.setWorkplace(this);
       c.start();

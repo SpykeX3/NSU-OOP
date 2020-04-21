@@ -4,7 +4,6 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
@@ -20,9 +19,9 @@ public class CourierTest {
   @Test
   public void runTest() {
     ArrayList<Courier> couriers = new ArrayList<>();
-    Courier courier = new Courier("C", 100, 1);
+    Courier courier = new Courier("C", 1000, 1);
     couriers.add(courier);
-    Pizzeria pz = new Pizzeria(new ArrayList<>(), couriers, 100, 5000, 2);
+    Pizzeria pz = new Pizzeria(new ArrayList<>(), couriers, 100, 5000, 4);
     Order o1 = new Order(1, 1, 1, new Date(), 1, 1);
     Order o2 = new Order(2, 2, 2, new Date(), -1, 1);
     Order o3 = new Order(3, 3, 3, new Date(), 1, -1);
@@ -34,6 +33,10 @@ public class CourierTest {
     pz.putInWarehouse(o3);
     pz.run();
     Log.CourierStatistics cs = pz.log.getCourierStat().get(courier);
+    System.out.println("Completed: "+cs.ordersCompleted);
+    System.out.println("Completed: "+cs.totalDistance);
+    System.out.println("Completed: "+cs.ordersCompleted);
+    System.out.println("Completed: "+cs.ordersCompleted);
     assertEquals(3, cs.ordersCompleted);
     assertEquals(6, cs.profit, 0.1);
   }

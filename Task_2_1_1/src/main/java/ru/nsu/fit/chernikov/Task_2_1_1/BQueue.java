@@ -11,7 +11,7 @@ import java.util.concurrent.locks.ReentrantLock;
  *
  * @param <T> type to store.
  */
-public abstract class BQueue<T> {
+public class BQueue<T> {
   private ReentrantLock lock;
   private Condition notEmpty;
   private Condition notFull;
