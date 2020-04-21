@@ -43,6 +43,7 @@ public class Cook extends Thread {
     while (now.before(workplace.getShiftEnd())) {
       Order task = workplace.takeCookingOrder();
       if (task == null) {
+        System.out.println("No tasks for cook " + name);
         break;
       }
       task.setCook(this);
@@ -54,6 +55,7 @@ public class Cook extends Thread {
       }
       workplace.log.logDoneCooking(this, task);
       if (!workplace.putInWarehouse(task)) {
+        System.out.println("Cook " + name + " Failed to put in warehouse ");
         break;
       }
       workplace.log.logPutInWarehouse(this, task);

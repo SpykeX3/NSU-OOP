@@ -3,6 +3,7 @@ package ru.nsu.fit.chernikov.Task_2_1_1;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -51,6 +52,9 @@ public class Log {
   private ConcurrentHashMap<Courier, CourierStatistics> courierStat;
   private List<Order> orders;
   private long exceptionCount;
+  Duration waitingForNewOrders;
+  Duration waitingForNotEmptyWarehouse;
+  Duration waitingForNotFullWarehouse;
 
   Log(String _filename) {
     try {
@@ -295,6 +299,17 @@ public class Log {
               "%15s %10d %7d %8.2f",
               courier.getCName(), stat.totalDistance, stat.ordersCompleted, stat.profit));
     }
+    if (waitingForNewOrders != null
+        && waitingForNotEmptyWarehouse != null
+        && waitingForNotFullWarehouse != null) {
+      print("Orders statistics:");
+      print("\tWaiting for new orders: " + waitingForNewOrders.toMillis() + "ms");
+      print("Warehouse statistics:");
+      print("\tCouriers waiting for deliveries:\t" + waitingForNotEmptyWarehouse.toMillis() + "ms");
+      print("\tCooks waiting for free space:\t" + waitingForNotEmptyWarehouse.toMillis() + "ms");
+    }
+
+    print("Orders:");
     for (Order ord : orders) {
       if (ord.getCook() == null) {
         print("Order " + ord.getOrderId() + " was ignored");
@@ -316,5 +331,17 @@ public class Log {
 
   public List<Order> getOrders() {
     return orders;
+  }
+
+  public void setWaitingForNewOrders(Duration waitingForNewOrders) {
+    this.waitingForNewOrders = waitingForNewOrders;
+  }
+
+  public void setWaitingForNotEmptyWarehouse(Duration waitingForNotEmptyWarehouse) {
+    this.waitingForNotEmptyWarehouse = waitingForNotEmptyWarehouse;
+  }
+
+  public void setWaitingForNotFullWarehouse(Duration waitingForNotFullWarehouse) {
+    this.waitingForNotFullWarehouse = waitingForNotFullWarehouse;
   }
 }

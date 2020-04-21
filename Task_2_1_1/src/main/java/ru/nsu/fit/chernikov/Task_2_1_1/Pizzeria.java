@@ -17,8 +17,8 @@ import java.util.concurrent.TimeUnit;
  * Pizzeria is a system that gets orders, produces them and delivers. It must have cook and courier.
  */
 public class Pizzeria {
-  private BQueue<Order> pendingOrders;
-  private BQueue<Order> warehouse;
+  private SmartBQueue<Order> pendingOrders;
+  private SmartBQueue<Order> warehouse;
 
   private ArrayList<Cook> cooks;
 
@@ -53,7 +53,7 @@ public class Pizzeria {
    */
   boolean putInWarehouse(Order order) {
     boolean res = false;
-    res = warehouse.put(order);
+    res = warehouse.put(order,timeUntilShiftEnd());
     return res;
   }
 
@@ -121,8 +121,8 @@ public class Pizzeria {
       long shiftLen) {
     cooks = _cooks;
     couriers = _couriers;
-    warehouse = new BQueue<>(whLimit);
-    pendingOrders = new BQueue<>();
+    warehouse = new SmartBQueue<>(whLimit);
+    pendingOrders = new SmartBQueue<>();
     delayLimit = delayLim;
     shiftLength = shiftLen;
     log = new Log();
@@ -153,6 +153,9 @@ public class Pizzeria {
         log.logException(e);
       }
     }
+    log.setWaitingForNewOrders(pendingOrders.getWaitingEmpty());
+    log.setWaitingForNotEmptyWarehouse(warehouse.getWaitingEmpty());
+    log.setWaitingForNotFullWarehouse(warehouse.getWaitingFull());
     log.logStatistics();
   }
 

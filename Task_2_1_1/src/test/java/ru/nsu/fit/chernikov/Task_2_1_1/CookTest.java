@@ -28,8 +28,8 @@ public class CookTest {
     pz.run();
     ArrayList<Order> al = pz.fillTrunk(3);
     assertEquals(3, (long) al.size());
-    assertEquals(al.get(0).getComplexity(), 1, 0.1);
-    assertEquals(al.get(1).getComplexity(), 2, 0.1);
-    assertEquals(al.get(2).getComplexity(), 3, 0.1);
+    assertEquals(1, al.get(0).getComplexity(), 0.1);
+    assertEquals(2, al.get(1).getComplexity(), 0.1);
+    assertEquals(3, al.get(2).getComplexity(), 0.1);
   }
 }
