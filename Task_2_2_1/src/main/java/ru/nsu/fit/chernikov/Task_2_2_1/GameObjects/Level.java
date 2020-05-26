@@ -18,12 +18,13 @@ public class Level extends Thread {
   private List<Food> foods;
   private Walls walls;
   private int height, width;
-  private int score;
+  private int score, interval;
   private Lock gameLock;
   private Lock readyLock;
   private boolean ready;
 
-  public Level(int height, int width, int foodCount) {
+  public Level(int height, int width, int foodCount, int interval) {
+    this.interval = interval;
     this.height = height;
     this.width = width;
     walls = new Walls(height, width, wallColor);
@@ -64,9 +65,7 @@ public class Level extends Thread {
       player.kill();
     }
     if (foods.stream().anyMatch(head::equals)) {
-      List<Food> gained = foods.stream()
-          .filter(head::equals)
-          .collect(Collectors.toList());
+      List<Food> gained = foods.stream().filter(head::equals).collect(Collectors.toList());
       for (Food f : gained) {
         player.feed(f.getFoodValue());
         score += f.getFoodValue();
@@ -85,16 +84,16 @@ public class Level extends Thread {
 
   public boolean isReady() {
     boolean res;
-    //readyLock.lock();
+    // readyLock.lock();
     res = ready;
-    //readyLock.unlock();
+    // readyLock.unlock();
     return res;
   }
 
   public void setReady(boolean value) {
-    //readyLock.lock();
+    // readyLock.lock();
     ready = value;
-    //readyLock.unlock();
+    // readyLock.unlock();
   }
 
   public List<Point> getPoints() {

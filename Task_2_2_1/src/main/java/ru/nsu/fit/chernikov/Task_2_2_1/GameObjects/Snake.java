@@ -50,11 +50,8 @@ public class Snake {
       }
       DirectedPoint newHead = new DirectedPoint(x, y, color,head.getDir());
       points.addFirst(newHead);
-      System.out.println(foodInside);
       if (foodInside == 0) {
         points.removeLast();
-        System.out.println("deleting last");
-        System.out.println(getPoints().size());
       } else {
         foodInside--;
       }

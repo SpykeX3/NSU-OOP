@@ -15,11 +15,6 @@ import ru.nsu.fit.chernikov.Task_2_2_1.GameObjects.Level;
 import ru.nsu.fit.chernikov.Task_2_2_1.GameObjects.Snake;
 
 public class Game extends Application {
-  private static Level level;
-
-  public String getGreeting() {
-    return "Hello world.";
-  }
 
   @Override
   public void start(Stage primaryStage) throws Exception {
@@ -39,10 +34,6 @@ public class Game extends Application {
   private void closeWindowEvent(WindowEvent event) {
     System.out.println("Have a nice day!");
     System.exit(0);
-  }
-
-  Level getLevel() {
-    return level;
   }
 
   public static void main(String[] args) {

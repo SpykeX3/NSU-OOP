@@ -8,19 +8,22 @@ public class GameTask extends Thread {
   private Level level;
   private Painter painter;
   private boolean finished;
+  private boolean paused;
 
   public GameTask(Level level, Painter painter, GraphicsContext gc) {
     this.level = level;
     this.painter = painter;
     finished = false;
+    paused = true;
   }
 
   @Override
   public void run() {
     while (!finished) {
-      System.out.println("Next");
-      painter.paint();
-      level.step();
+      if (!paused) {
+        painter.paint();
+        level.step();
+      }
       try {
         sleep(500);
       } catch (InterruptedException e) {
@@ -31,5 +34,13 @@ public class GameTask extends Thread {
 
   public void finish() {
     finished = true;
+  }
+
+  public void pause() {
+    paused = true;
+  }
+
+  public void unpause() {
+    paused = false;
   }
 }

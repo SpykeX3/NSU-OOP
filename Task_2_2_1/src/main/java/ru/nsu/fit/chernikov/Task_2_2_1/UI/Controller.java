@@ -9,7 +9,6 @@ import ru.nsu.fit.chernikov.Task_2_2_1.GameObjects.Direction;
 import ru.nsu.fit.chernikov.Task_2_2_1.GameObjects.Level;
 import ru.nsu.fit.chernikov.Task_2_2_1.GameTask;
 
-import static java.lang.Thread.sleep;
 
 public class Controller {
 
@@ -27,8 +26,7 @@ public class Controller {
     context = gameCanvas.getGraphicsContext2D();
     gameCanvas.setFocusTraversable(true);
     gameCanvas.setOnKeyPressed(this::keyHandler);
-    paused = false;
-    level = new Level(48, 72, 3);
+    level = new Level(48, 72, 3,200);
     paint = new Painter(level, context, this);
     gameTask = new GameTask(level, paint, context);
     paint.paint();
@@ -50,18 +48,25 @@ public class Controller {
       case RIGHT:
         dir = Direction.Values.RIGHT;
         break;
+      case SPACE:
+        gameTask.pause();
+        return;
       case ENTER:
-        paused = !paused;
-        break;
+        level = new Level(48, 72, 3,200);
+        paint = new Painter(level, context, this);
+        gameTask.finish();
+        gameTask = new GameTask(level, paint, context);
+        paint.paint();
+        gameTask.start();
+        return;
       case ESCAPE:
         gameTask.finish();
         System.exit(0);
       default:
         return;
     }
-    if (dir != null) {
-      level.rotate(dir);
-    }
+    gameTask.unpause();
+    level.rotate(dir);
   }
 
   public Label getScoreLabel() {
