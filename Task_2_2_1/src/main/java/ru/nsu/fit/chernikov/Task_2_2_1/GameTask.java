@@ -25,7 +25,7 @@ public class GameTask extends Thread {
         level.step();
       }
       try {
-        sleep(500);
+        sleep(level.getInterval());
       } catch (InterruptedException e) {
         e.printStackTrace();
       }

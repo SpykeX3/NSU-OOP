@@ -9,7 +9,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
 
-public class Level extends Thread {
+public class Level {
   private static final Color snakeColor = new Color(0.7, 0, 0.7, 1);
   private static final Color foodColor = new Color(0.2, 1, 0.2, 1);
   private static final Color wallColor = new Color(0.1, 0.1, 0.1, 1);
@@ -62,6 +62,9 @@ public class Level extends Thread {
     player.move();
     Point head = player.getHead();
     if (walls.getPoints().stream().anyMatch(head::equals)) {
+      player.kill();
+    }
+    if (head.getX() < 0 || head.getX() >= width || head.getY() < 0 || head.getY() >= height) {
       player.kill();
     }
     if (foods.stream().anyMatch(head::equals)) {
@@ -131,8 +134,7 @@ public class Level extends Thread {
     return width;
   }
 
-  @Override
-  public void run() {
-    while (isReady()) {}
+  public int getInterval() {
+    return interval;
   }
 }
