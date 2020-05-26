@@ -30,10 +30,6 @@ dependencies {
     compile group: 'org.openjfx', name: 'javafx', version: '11', ext: 'pom'
 }
 
-javafx {
-    version = "11.0.2"
-    modules = [ 'javafx.controls' ]
-}
 
 application {
     // Define the main class for the application
