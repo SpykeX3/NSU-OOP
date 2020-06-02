@@ -8,17 +8,18 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import javafx.scene.paint.Color;
 import javafx.stage.WindowEvent;
-import ru.nsu.fit.chernikov.Task_2_2_1.GameObjects.Direction;
-import ru.nsu.fit.chernikov.Task_2_2_1.GameObjects.Level;
-import ru.nsu.fit.chernikov.Task_2_2_1.GameObjects.Snake;
 
+/**
+ * Application class for running the snake. Relies on static fields so only one entity may be
+ * running at a time.
+ */
 public class Game extends Application {
+
+  private static GameTask gameTask = null;
 
   @Override
   public void start(Stage primaryStage) throws Exception {
-
     FXMLLoader loader = new FXMLLoader(getClass().getResource("/mainScene.fxml"));
     Parent root = loader.load();
     primaryStage.setScene(new Scene(root));
@@ -31,13 +32,23 @@ public class Game extends Application {
     primaryStage.show();
   }
 
+  /**
+   * Set a reference for GameTask object that should be stopped when application is closed.
+   *
+   * @param gt GameObject to be stopped
+   */
+  public static void setGameTask(GameTask gt) {
+    gameTask = gt;
+  }
+
   private void closeWindowEvent(WindowEvent event) {
     System.out.println("Have a nice day!");
-    System.exit(0);
+    if (gameTask != null) {
+      gameTask.finish();
+    }
   }
 
   public static void main(String[] args) {
-
     Application.launch();
   }
 }

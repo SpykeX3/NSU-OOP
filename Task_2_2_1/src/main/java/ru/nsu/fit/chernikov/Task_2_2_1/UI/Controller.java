@@ -5,10 +5,10 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
+import ru.nsu.fit.chernikov.Task_2_2_1.Game;
 import ru.nsu.fit.chernikov.Task_2_2_1.GameObjects.Direction;
 import ru.nsu.fit.chernikov.Task_2_2_1.GameObjects.Level;
 import ru.nsu.fit.chernikov.Task_2_2_1.GameTask;
-
 
 public class Controller {
 
@@ -26,9 +26,10 @@ public class Controller {
     context = gameCanvas.getGraphicsContext2D();
     gameCanvas.setFocusTraversable(true);
     gameCanvas.setOnKeyPressed(this::keyHandler);
-    level = new Level(48, 72, 3,200);
+    level = new Level(48, 72, 3, 200);
     paint = new Painter(level, context, this);
     gameTask = new GameTask(level, paint, context);
+    Game.setGameTask(gameTask);
     paint.paint();
     gameTask.start();
   }
@@ -52,16 +53,13 @@ public class Controller {
         gameTask.pause();
         return;
       case ENTER:
-        level = new Level(48, 72, 3,200);
+        level = new Level(48, 72, 3, 200);
         paint = new Painter(level, context, this);
         gameTask.finish();
         gameTask = new GameTask(level, paint, context);
         paint.paint();
         gameTask.start();
         return;
-      case ESCAPE:
-        gameTask.finish();
-        System.exit(0);
       default:
         return;
     }

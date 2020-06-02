@@ -4,13 +4,20 @@ import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
+/** Walls is a container of points on the field. */
 public class Walls {
   private List<Point> points;
   private int height, width;
   private Color color;
 
+  /**
+   * Create empty Walls object.
+   *
+   * @param height field height
+   * @param width field width
+   * @param color color of the walls
+   */
   public Walls(int height, int width, Color color) {
     this.color = color;
     this.height = height;
@@ -18,32 +25,31 @@ public class Walls {
     points = new ArrayList<>();
   }
 
-  public void addWall(Point p) {
+  /**
+   * Add a single point to the Walls.
+   *
+   * @param p new wall
+   * @return true if position was accessible and wall was added.
+   */
+  public boolean addWall(Point p) {
     int x = p.getX();
     int y = p.getY();
     p.setColor(color);
     if (x >= width || x < 0 || y < 0 || y >= height) {
-      return;
+      return false;
     }
     if (points.stream().noneMatch(p::equals)) {
       points.add(p);
+      return true;
     }
+    return false;
   }
 
-  public void generateWalls(int wallCount) {
-    Random rnd = new Random();
-    for (int i = 0; i < wallCount; i++) {
-      Point p;
-      do {
-        int x = rnd.nextInt(width);
-        int y = rnd.nextInt(height);
-        p = new Point(x, y, color);
-      } while (points.stream().anyMatch(p::equals)
-          || (p.getX() == width / 2 && p.getY() == height / 2));
-      points.add(p);
-    }
-  }
-
+  /**
+   * Get all wall points.
+   *
+   * @return list of all walls
+   */
   public List<Point> getPoints() {
     return points;
   }

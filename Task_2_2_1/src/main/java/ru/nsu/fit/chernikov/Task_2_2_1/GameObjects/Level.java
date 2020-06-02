@@ -9,6 +9,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
 
+/** Level class is used to store and process the state of the game. */
 public class Level {
   private static final Color snakeColor = new Color(0.7, 0, 0.7, 1);
   private static final Color foodColor = new Color(0.2, 1, 0.2, 1);
@@ -23,20 +24,35 @@ public class Level {
   private Lock readyLock;
   private boolean ready;
 
+  /**
+   * Level constructor.
+   *
+   * @param height height of the game field
+   * @param width width of the game field
+   * @param foodCount food number to exist simultaneously
+   * @param interval time between frames
+   */
   public Level(int height, int width, int foodCount, int interval) {
     this.interval = interval;
     this.height = height;
     this.width = width;
-    walls = new Walls(height, width, wallColor);
-    walls.generateWalls((height * width) / 12);
+    int startX = width / 2;
+    int startY = height / 2;
+    WallGenerator generator = new WallGeneratorRandom((height * width) / 11, wallColor);
+    walls = generator.generate(height, width, startX, startY);
     this.gameLock = new ReentrantLock();
     this.readyLock = new ReentrantLock();
     ready = false;
     foods = new ArrayList<>();
-    player = new Snake(snakeColor, width / 2, height / 2, Direction.Values.UP, height, width);
+    player = new Snake(snakeColor, startX, startY, Direction.Values.UP, height, width);
     addFoods(foodCount);
   }
 
+  /**
+   * Generate food on the map.
+   *
+   * @param count number of food points to be generated.
+   */
   private void addFoods(int count) {
     List<Point> usedSpace = player.getPoints();
     usedSpace.addAll(foods);
@@ -54,6 +70,7 @@ public class Level {
     }
   }
 
+  /** Simulate a single game step. */
   public void step() {
     if (player.isDead()) {
       return;
@@ -77,28 +94,23 @@ public class Level {
       foods.removeIf(head::equals);
       addFoods(1);
     }
-    setReady(true);
     gameLock.unlock();
   }
 
+  /**
+   * Tells if game is finished.
+   *
+   * @return true if finished, false otherwise.
+   */
   boolean finished() {
     return player.isDead();
   }
 
-  public boolean isReady() {
-    boolean res;
-    // readyLock.lock();
-    res = ready;
-    // readyLock.unlock();
-    return res;
-  }
-
-  public void setReady(boolean value) {
-    // readyLock.lock();
-    ready = value;
-    // readyLock.unlock();
-  }
-
+  /**
+   * Get all points on the map.
+   *
+   * @return list of all points.
+   */
   public List<Point> getPoints() {
     gameLock.lock();
     List<Point> result = player.getPoints();
@@ -108,32 +120,67 @@ public class Level {
     return result;
   }
 
+  /**
+   * Get size of one point.
+   *
+   * @return point size
+   */
   public int getSize() {
     return 10;
   }
 
+  /**
+   * Get current player score.
+   *
+   * @return game score
+   */
   public int score() {
     return score;
   }
 
+  /**
+   * Rotate the player snake.
+   *
+   * @param dir new direction
+   */
   public void rotate(Direction.Values dir) {
     gameLock.lock();
     player.rotate(dir);
     gameLock.unlock();
   }
 
+  /**
+   * Get game lock. Can be used to pause the game.
+   *
+   * @return game lock
+   */
   public Lock getGameLock() {
     return gameLock;
   }
 
+  /**
+   * Get field height.
+   *
+   * @return field height
+   */
   public int getHeight() {
     return height;
   }
 
+  /**
+   * Get field width.
+   *
+   * @return field width
+   */
   public int getWidth() {
     return width;
   }
 
+  /**
+   * Get time in ms between frames.
+   *
+   * @return time interval between frames
+   */
   public int getInterval() {
     return interval;
   }
